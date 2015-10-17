@@ -1,3 +1,4 @@
 Nicholas Hale
 Andres Alban
 Jacob Moorman
+Hardik Darji
