@@ -18,8 +18,8 @@ public class Main {
         //hard code initial values for now
         long walkSeed = 1209387;
         long stickSeed = 1209388;
-        int n = 100;
-        int walks = 1000;
+        int n = 1000;
+        int walks = 100000;
 	    //Attempt generic DumbWalker simulation
         Walker walker = new DumbWalker(walkSeed, stickSeed);
         //instantiate the walk space
@@ -31,7 +31,7 @@ public class Main {
         System.out.println(walks + " random walks completed in " +
                 (System.currentTimeMillis() - start) + " ms");
         //rasterize the dla and store the image
-        int hue = 11;
+        int hue = 100;
         BufferedImage dlaImg = space.rasterize(hue);
         //attempt write the image to a file
         try {
@@ -45,7 +45,7 @@ public class Main {
 
         JFrame frame = new JFrame("DumbWalker DLA");
         //set the scaling factor
-        int scale = 10;
+        int scale = 1;
         //render the space as a bitmap on a JFrame
         JPanel dlaPanel = new DLAPanel(dlaImg, scale);
         frame.setSize(n*scale, n*scale);

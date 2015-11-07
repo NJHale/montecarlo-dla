@@ -40,9 +40,12 @@ public abstract class AdjMatrix {
         //set the color of the (i, j)th pixel
         for (int i = 0; i < size(); i++) {
             for (int j = 0; j < size(); j++) {
+                //calculate distance from center
+                int r = (int) Math.sqrt(Math.pow((size()/2 - i), 2) +
+                        Math.pow((size()/2 - j), 2));
                 //calculate color palette based on value at (i, j)
-                int palette = (int) ((Math.pow(10, get(i, j)))
-                        * Math.log(size())) * get(i, j) * hue;
+                int palette = (int) ((Math.exp(r) + hue) % 16777215) * get(i, j);
+                System.out.println("palette: " + palette);
                 img.setRGB(i, j, palette);
             }
         }

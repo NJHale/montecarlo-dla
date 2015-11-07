@@ -2,16 +2,10 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="25633503-33ba-424c-a6e4-4bfc3f424dcc" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/edu/njit/math450/dla/DLAPanel.java" />
-      <change type="DELETED" beforePath="E:\My Documents\FALL2015\MATH450\montecarlo-dla\out\production\montecarlo-dla\edu\njit\math450\MainTest.class" afterPath="" />
-      <change type="DELETED" beforePath="E:\My Documents\FALL2015\MATH450\montecarlo-dla\src\edu\njit\math450\MainTest.java" afterPath="" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/montecarlo-dla/edu/njit/math450/Main.class" afterPath="$PROJECT_DIR$/out/production/montecarlo-dla/edu/njit/math450/Main.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/montecarlo-dla/edu/njit/math450/matrix/AdjMatrix.class" afterPath="$PROJECT_DIR$/out/production/montecarlo-dla/edu/njit/math450/matrix/AdjMatrix.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/images/dla-100-1000-1209387.bmp" afterPath="$PROJECT_DIR$/images/dla-100-1000-1209387.bmp" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/edu/njit/math450/matrix/AdjMatrix.java" afterPath="$PROJECT_DIR$/src/edu/njit/math450/matrix/AdjMatrix.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/edu/njit/math450/matrix/ArrayAdjMatrix.java" afterPath="$PROJECT_DIR$/src/edu/njit/math450/matrix/ArrayAdjMatrix.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/edu/njit/math450/dla/DLASimulation.java" afterPath="$PROJECT_DIR$/src/edu/njit/math450/dla/DLASimulation.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/edu/njit/math450/walker/DumbWalker.java" afterPath="$PROJECT_DIR$/src/edu/njit/math450/walker/DumbWalker.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/edu/njit/math450/Main.java" afterPath="$PROJECT_DIR$/src/edu/njit/math450/Main.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/edu/njit/math450/walker/Walker.java" afterPath="$PROJECT_DIR$/src/edu/njit/math450/walker/Walker.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="montecarlo-dla.iws" />
@@ -38,7 +32,7 @@
         <entry file="file://$PROJECT_DIR$/src/edu/njit/math450/Main.java">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
-              <caret line="37" column="33" selection-start-line="37" selection-start-column="33" selection-end-line="37" selection-end-column="33" />
+              <caret line="21" column="22" selection-start-line="21" selection-start-column="22" selection-end-line="21" selection-end-column="22" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -46,8 +40,22 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="dla-100-1000-1209387.bmp" pinned="false" current-in-tab="true">
+      <file leaf-file-name="dla-1000-100000-1209387.bmp" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/images/dla-1000-100000-1209387.bmp">
+          <provider selected="true" editor-type-id="images">
+            <state />
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="dla-100-1000-1209387.bmp" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/images/dla-100-1000-1209387.bmp">
+          <provider selected="true" editor-type-id="images">
+            <state />
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="dla-1000-10000-1209387.bmp" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/images/dla-1000-10000-1209387.bmp">
           <provider selected="true" editor-type-id="images">
             <state />
           </provider>
@@ -57,7 +65,7 @@
         <entry file="file://$PROJECT_DIR$/src/edu/njit/math450/matrix/AdjMatrix.java">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
-              <caret line="41" column="46" selection-start-line="41" selection-start-column="46" selection-end-line="41" selection-end-column="46" />
+              <caret line="46" column="55" selection-start-line="46" selection-start-column="55" selection-end-line="46" selection-end-column="55" />
               <folding />
             </state>
           </provider>
@@ -100,8 +108,8 @@
         <option value="$PROJECT_DIR$/src/edu/njit/math450/dla/DLASimulation.java" />
         <option value="$PROJECT_DIR$/src/edu/njit/math450/walker/Walker.java" />
         <option value="$PROJECT_DIR$/src/edu/njit/math450/walker/DumbWalker.java" />
-        <option value="$PROJECT_DIR$/src/edu/njit/math450/matrix/AdjMatrix.java" />
         <option value="$PROJECT_DIR$/src/edu/njit/math450/dla/DLAPanel.java" />
+        <option value="$PROJECT_DIR$/src/edu/njit/math450/matrix/AdjMatrix.java" />
         <option value="$PROJECT_DIR$/src/edu/njit/math450/Main.java" />
       </list>
     </option>
@@ -389,7 +397,7 @@
       <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.52587116" sideWeight="0.49791667" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.52587116" sideWeight="0.49791667" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.15989584" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
@@ -595,12 +603,14 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/edu/njit/math450/matrix/AdjMatrix.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="41" column="46" selection-start-line="41" selection-start-column="46" selection-end-line="41" selection-end-column="46" />
-          <folding />
-        </state>
+    <entry file="file://$PROJECT_DIR$/images/dla-1000-10000-1209387.bmp">
+      <provider selected="true" editor-type-id="images">
+        <state />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/images/dla-100-1000-1209387.bmp">
+      <provider selected="true" editor-type-id="images">
+        <state />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/edu/njit/math450/dla/DLAPanel.java">
@@ -613,17 +623,25 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/edu/njit/math450/matrix/AdjMatrix.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="46" column="55" selection-start-line="46" selection-start-column="55" selection-end-line="46" selection-end-column="55" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/edu/njit/math450/Main.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
-          <caret line="37" column="33" selection-start-line="37" selection-start-column="33" selection-end-line="37" selection-end-column="33" />
+          <caret line="21" column="22" selection-start-line="21" selection-start-column="22" selection-end-line="21" selection-end-column="22" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/images/dla-100-1000-1209387.bmp">
+    <entry file="file://$PROJECT_DIR$/images/dla-1000-100000-1209387.bmp">
       <provider selected="true" editor-type-id="images">
         <state />
       </provider>
