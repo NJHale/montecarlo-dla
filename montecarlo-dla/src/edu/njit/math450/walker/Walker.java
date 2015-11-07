@@ -1,5 +1,7 @@
 package edu.njit.math450.walker;
 
+import java.util.Random;
+
 import edu.njit.math450.matrix.*;
 
 /**
@@ -9,7 +11,16 @@ public abstract class Walker {
 
     protected class Locale {
         public int i, j;
+
+        public Locale() {}
+
+        public Locale(Locale local) {
+            i = locale.i;
+            j = locale.j;
+        }
     }
+
+    protected Random rand;
 
     protected Locale locale;
 
@@ -30,12 +41,12 @@ public abstract class Walker {
     /**
      * Parameterized constructor that sets
      * the starting locale in the adjacency matrix
-     * @param n dimension of the n x n
+     * @param walkSeed walkSeed of the random walk
      */
-    protected Walker(int n, long walkSeed) {
+    protected Walker(long walkSeed) {
         locale = new Locale();
-        reOriginate(n);
         this.walkSeed = walkSeed;
+        rand = new Random(walkSeed);
     }
 
     /**
@@ -63,7 +74,7 @@ public abstract class Walker {
      * @return true if the walker is to stick in the projected locale,
      *  false otherwise
      */
-    protected abstract Boolean stick(Locale projected, AdjMatrix space);
+    protected abstract Boolean willStick(Locale projected, AdjMatrix space);
 
     /**
      * Sets the Walker's locale to some origin position
