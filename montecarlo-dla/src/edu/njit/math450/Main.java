@@ -18,10 +18,11 @@ public class Main {
         //hard code initial values for now
         long walkSeed = 1209387;
         long stickSeed = 1209388;
-        int n = 1000;
-        int walks = 100000;
+        int n = 100;
+        int walks = 1000;
+        int buffer = 3;
 	    //Attempt generic DumbWalker simulation
-        Walker walker = new DumbWalker(walkSeed, stickSeed);
+        Walker walker = new RadialWalker(walkSeed, 1, buffer);//new DumbWalker(walkSeed, stickSeed);
         //instantiate the walk space
         AdjMatrix space = new ArrayAdjMatrix(n);
         //create the simulation
@@ -45,7 +46,7 @@ public class Main {
 
         JFrame frame = new JFrame("DumbWalker DLA");
         //set the scaling factor
-        int scale = 1;
+        int scale = 10 ;
         //render the space as a bitmap on a JFrame
         JPanel dlaPanel = new DLAPanel(dlaImg, scale);
         frame.setSize(n*scale, n*scale);

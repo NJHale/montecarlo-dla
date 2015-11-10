@@ -45,7 +45,6 @@ public abstract class AdjMatrix {
                         Math.pow((size()/2 - j), 2));
                 //calculate color palette based on value at (i, j)
                 int palette = (int) ((Math.exp(r) + hue) % 16777215) * get(i, j);
-                System.out.println("palette: " + palette);
                 img.setRGB(i, j, palette);
             }
         }
