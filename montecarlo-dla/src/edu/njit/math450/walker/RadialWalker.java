@@ -45,21 +45,25 @@ public class RadialWalker extends Walker {
         //apply the step
         proj.i = locale.i + (int) Math.pow(-1, shift) * (1 - axis);
         proj.j = locale.j + (int) Math.pow(-1, shift) * axis;
-        System.out.println("Raw attempted : " + proj.i + " : " + proj.j);
+        //System.out.println("Raw attempted : " + proj.i + " : " + proj.j);
+        int center = (int) (space.size() / 2);
         //calculate and truncate distance from the seed (euclidean norm)
-        int r = (int) Math.sqrt(Math.pow((space.size()/2 - proj.i), 2) //<- assume seed is centered in the space
-                + Math.pow((space.size()/2 - proj.j), 2));
-        System.out.println("r: " + r);
+        int r = (int) Math.sqrt(Math.pow((center - proj.i), 2) //<- assume seed is centered in the space
+                + Math.pow((center - proj.j), 2));
+        //System.out.println("r: " + r);
         //check if the walker has crossed the radial boundary
         int bound = radius + buffer;
         if (r >= bound) {
             //reflect the projected Locale
+            //corrected reflection radius taking into account the step
+            int cor = -(r - Math.abs(r - bound));
+            //System.out.println("cor: " + cor);
             //calculate the angle of reflection (in radians)
-            double rads = Math.asin(proj.i / r) + Math.PI;
-            locale.i = space.size()/2 + (int) (bound * Math.sin(rads));
-            locale.j = space.size()/2 + (int) (bound * Math.cos(rads));
+            double rads = Math.asin((proj.i - space.size()/2) / cor);
+            proj.i = (int) (center + (cor * Math.sin(rads)));
+            proj.j = (int) (center + (cor * Math.cos(rads)));
         }
-        System.out.println("Corrected attempted step: " + proj.i + " : " + proj.j);
+        //System.out.println("Corrected attempted step: " + proj.i + " : " + proj.j);
         //return the projected Locale
         return proj;
     }
@@ -95,6 +99,7 @@ public class RadialWalker extends Walker {
             //set the Walker's locale to projected
             locale = proj;
         }
+        //System.out.println("Walk complete!");
     }
 
     /**
@@ -134,14 +139,10 @@ public class RadialWalker extends Walker {
     public void reOriginate(int n) {
         //create a random angle of inclination [0, 2*pi] (in radians)
         double rads = 2 * Math.PI * rand.nextDouble();
-        System.out.println(rads);
         //calculate the radial bound of the allowed walking area
         int bound = radius + buffer;
-        System.out.println(bound);
         //find the rectangular equivalent of the polar coordinate
-        locale.i = n/2 + (int) (bound * Math.sin(rads));
-        locale.j = n/2 + (int) (bound * Math.cos(rads));
-        System.out.println("reOriginate i: " + locale.i);
-        System.out.println("reOriginate j: " + locale.j);
+        locale.i = (int) (n/2 + (bound * Math.sin(rads)));
+        locale.j = (int) (n/2 + (bound * Math.cos(rads)));
     }
 }
