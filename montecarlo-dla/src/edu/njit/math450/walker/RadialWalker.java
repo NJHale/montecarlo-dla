@@ -45,18 +45,21 @@ public class RadialWalker extends Walker {
         //apply the step
         proj.i = locale.i + (int) Math.pow(-1, shift) * (1 - axis);
         proj.j = locale.j + (int) Math.pow(-1, shift) * axis;
+        System.out.println("Raw attempted : " + proj.i + " : " + proj.j);
         //calculate and truncate distance from the seed (euclidean norm)
         int r = (int) Math.sqrt(Math.pow((space.size()/2 - proj.i), 2) //<- assume seed is centered in the space
                 + Math.pow((space.size()/2 - proj.j), 2));
+        System.out.println("r: " + r);
         //check if the walker has crossed the radial boundary
         int bound = radius + buffer;
         if (r >= bound) {
             //reflect the projected Locale
             //calculate the angle of reflection (in radians)
             double rads = Math.asin(proj.i / r) + Math.PI;
-            proj.i = bound * (int) Math.sin(rads);
-            proj.j = bound * (int) Math.cos(rads);
+            locale.i = space.size()/2 + (int) (bound * Math.sin(rads));
+            locale.j = space.size()/2 + (int) (bound * Math.cos(rads));
         }
+        System.out.println("Corrected attempted step: " + proj.i + " : " + proj.j);
         //return the projected Locale
         return proj;
     }
@@ -136,8 +139,8 @@ public class RadialWalker extends Walker {
         int bound = radius + buffer;
         System.out.println(bound);
         //find the rectangular equivalent of the polar coordinate
-        locale.i = bound * (int) Math.sin(rads);
-        locale.j = bound * (int) Math.cos(rads);
+        locale.i = n/2 + (int) (bound * Math.sin(rads));
+        locale.j = n/2 + (int) (bound * Math.cos(rads));
         System.out.println("reOriginate i: " + locale.i);
         System.out.println("reOriginate j: " + locale.j);
     }
