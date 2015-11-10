@@ -18,7 +18,7 @@ public class Main {
         //hard code initial values for now
         long walkSeed = 1209387;
         long stickSeed = 1209388;
-        int n = 100;
+        int n = 1000;
         int walks = 1000;
         int buffer = 3;
 	    //Attempt generic DumbWalker simulation
@@ -37,17 +37,17 @@ public class Main {
         //attempt write the image to a file
         try {
             File out = new File("images/dla-" + n +
-                    "-" + walks + "-" + walkSeed + ".bmp");
-            ImageIO.write(dlaImg, "bmp", out);
+                    "-" + walks + "-" + walkSeed + ".png");
+            ImageIO.write(dlaImg, "png", out);
         } catch (Exception e) {
             System.err.println("An error occurred while attempting to store the " +
-                    "DLA in a bitmap");
+                    "DLA in a png");
         }
 
         JFrame frame = new JFrame("DumbWalker DLA");
         //set the scaling factor
         int scale = 10 ;
-        //render the space as a bitmap on a JFrame
+        //render the space on a JFrame
         JPanel dlaPanel = new DLAPanel(dlaImg, scale);
         frame.setSize(n*scale, n*scale);
         frame.setContentPane(dlaPanel);
