@@ -2,6 +2,8 @@ package edu.njit.math450.walker;
 
 import edu.njit.math450.matrix.AdjMatrix;
 
+import java.util.Random;
+
 /**
  * Created by nhale on 11/5/2015.
  */
@@ -13,6 +15,8 @@ public class RadialWalker extends Walker {
     //Extra space given for the walkers to move in
     protected int buffer;
 
+    protected Random oriRand;
+
     /**
      * Parameterized constructor creates a walker that walks from a radial
      * boundary held closely off the max radius of the aggregate
@@ -20,8 +24,9 @@ public class RadialWalker extends Walker {
      * @param radius Initial max radius of the aggregate
      * @param buffer Distance from the max radius to place the radial boundary
      */
-    public RadialWalker(long walkSeed, int radius, int buffer) {
+    public RadialWalker(long oriSeed, long walkSeed, int radius, int buffer) {
         super(walkSeed);
+        this.oriRand = new Random(oriSeed);
         this.radius = radius;
         this.buffer = buffer;
     }
@@ -36,6 +41,7 @@ public class RadialWalker extends Walker {
      */
     @Override
     protected Locale step(AdjMatrix space) {
+        //System.out.println("step...");
         //decide axis of movement
         //0 -> vertical, 1 -> horizontal
         int axis = (int) (rand.nextDouble() * 2);
@@ -48,20 +54,41 @@ public class RadialWalker extends Walker {
         //System.out.println("Raw attempted : " + proj.i + " : " + proj.j);
         int center = (int) (space.size() / 2);
         //calculate and truncate distance from the seed (euclidean norm)
-        int r = (int) Math.sqrt(Math.pow((center - proj.i), 2) //<- assume seed is centered in the space
-                + Math.pow((center - proj.j), 2));
+        int r = (int) distance(proj.j, proj.i, center, center);
         //System.out.println("r: " + r);
         //check if the walker has crossed the radial boundary
         int bound = radius + buffer;
-        if (r >= bound) {
-            //reflect the projected Locale
-            //corrected reflection radius taking into account the step
-            int cor = -(r - Math.abs(r - bound));
-            //System.out.println("cor: " + cor);
-            //calculate the angle of reflection (in radians)
-            double rads = Math.asin((proj.i - space.size()/2) / cor);
-            proj.i = (int) (center + (cor * Math.sin(rads)));
-            proj.j = (int) (center + (cor * Math.cos(rads)));
+        //System.out.println("bound: " + bound);
+        //System.out.println("Raw attempted : " + proj.i + " : " + proj.j);
+        if (r > bound) {
+//            //get the angle of incline
+//            double rads = Math.PI / 2;
+//            //check to see if x = 0
+//            if (proj.j - center != 0) {
+//                rads = Math.atan((center - proj.i) / (center - proj.j));
+//            }
+//            //find how far over the boundary it was
+//            r = r - (r - bound);
+//            //System.out.println("rads: " + rads);
+//            if ((proj.j - center < 0 && proj.i - center > 0) ||
+//                    (proj.j - center < 0 && proj.i - center < 0)) {
+//                rads += Math.PI;
+//            }
+//            //reflect
+//            proj.i = (int) (center + r * Math.sin(rads + Math.PI));
+//            proj.j = (int) (center + r * Math.cos(rads + Math.PI));
+            //calculate the radius difference
+            int dr = r - bound;
+
+            //reflect in rectangular coordinates
+            proj.i = (int) (center + (Math.copySign(Math.abs(proj.i) - dr, proj.i) - center));
+            proj.j = (int) (center + (Math.copySign(Math.abs(proj.j) - dr, proj.j) - center));
+
+            //correct if proj.i or proj.j lie outside the boundary
+            if (proj.i >= space.size()) proj.i = space.size() - 1;
+            if (proj.i < 0) proj.i = 0;
+            if (proj.j >= space.size()) proj.j = space.size() - 1;
+            if (proj.j < 0) proj.j = 0;
         }
         //System.out.println("Corrected attempted step: " + proj.i + " : " + proj.j);
         //return the projected Locale
@@ -76,6 +103,7 @@ public class RadialWalker extends Walker {
      */
     @Override
     public void walk(AdjMatrix space) {
+        //System.out.println("boundary: " + radius + buffer);
         //relocate the walker to a boundary
         reOriginate(space.size());
         //declare the projected Locale
@@ -90,9 +118,14 @@ public class RadialWalker extends Walker {
             if (willStick(proj, space)) {
                 //update the space
                 space.set(proj.i, proj.j, space.get(proj.i, proj.j) + 1);
+                //calculate and truncate distance from the seed (euclidean norm)
+                int r = (int) distance(proj.j, proj.i, space.size()/2, space.size()/2);
                 //update the max radius of the aggregate if there is still room to expand
-                if (radius + buffer < space.size())
-                    radius += 1;
+                int bound = radius + buffer;
+                if ((bound < ((space.size() / 2) - 1) &&
+                        (r > radius))){
+                    radius = r;
+                }
                 //end walk
                 walking = false;
             }
@@ -119,13 +152,13 @@ public class RadialWalker extends Walker {
         int n = space.size();
         //stick to the aggregate
         if (up >= 0  && space.get(up, proj.j) > 0)
-            return rand.nextBoolean();
+            return true;//rand.nextBoolean();
         if (down < n && space.get(down, proj.j) > 0)
-            return rand.nextBoolean();
+            return true;//rand.nextBoolean();
         if (left >= 0 && space.get(proj.i, left) > 0)
-            return rand.nextBoolean();
+            return true;//rand.nextBoolean();
         if (right < n && space.get(proj.i, right) > 0)
-            return rand.nextBoolean();
+            return true;//rand.nextBoolean();
         //otherwise the walker is still wandering in space
         return false;
     }
@@ -138,11 +171,31 @@ public class RadialWalker extends Walker {
     @Override
     public void reOriginate(int n) {
         //create a random angle of inclination [0, 2*pi] (in radians)
-        double rads = 2 * Math.PI * rand.nextDouble();
+        double rads = 2 * Math.PI * oriRand.nextDouble();
+        //double angle = (360 * rand.nextDouble()) * Math.PI / 180;
+        //System.out.println(rads);
         //calculate the radial bound of the allowed walking area
         int bound = radius + buffer;
         //find the rectangular equivalent of the polar coordinate
         locale.i = (int) (n/2 + (bound * Math.sin(rads)));
         locale.j = (int) (n/2 + (bound * Math.cos(rads)));
+        //System.out.println("reOriginate i: " + locale.i + " j: " + locale.j + " bound: " + bound);
+    }
+
+    /**
+     * Calculates and returns the Euclidean norm of the
+     * difference vector between two points (i, j) and (h, k)
+     * @param i x coord of (i, j)
+     * @param j y coord of (i, j)
+     * @param h x coord of (h, k)
+     * @param k y coord of (h, k)
+     *
+     * @return Euclidean norm of distance from (i, i) to (h, k)
+     */
+    public double distance(int i, int j, int h, int k) {
+        //calculate the distance
+        double dist = Math.sqrt(Math.pow((i - h), 2) //<- assume seed is centered in the space
+                + Math.pow((j - k), 2));
+        return dist;
     }
 }

@@ -16,13 +16,13 @@ public class Main {
     public static void main(String[] args) {
         System.out.println("Starting Simulation!");
         //hard code initial values for now
-        long walkSeed = 1209387;
-        long stickSeed = 1209388;
+        long walkSeed = 7877877;
+        long oriSeed = 7877877;
         int n = 1000;
-        int walks = 1000;
+        int walks = 100000;
         int buffer = 3;
 	    //Attempt generic DumbWalker simulation
-        Walker walker = new RadialWalker(walkSeed, 1, buffer);//new DumbWalker(walkSeed, stickSeed);
+        Walker walker = new RadialWalker(oriSeed, walkSeed, 1, buffer);//new DumbWalker(walkSeed, stickSeed);
         //instantiate the walk space
         AdjMatrix space = new ArrayAdjMatrix(n);
         //create the simulation
@@ -46,7 +46,7 @@ public class Main {
 
         JFrame frame = new JFrame("DumbWalker DLA");
         //set the scaling factor
-        int scale = 10 ;
+        int scale = 1;
         //render the space on a JFrame
         JPanel dlaPanel = new DLAPanel(dlaImg, scale);
         frame.setSize(n*scale, n*scale);

@@ -49,7 +49,7 @@ public class DLASimulation {
     public AdjMatrix simulate(int walks) {
         //walk walks times to generate the DLA
         for (int i = 0; i < walks; i++) {
-            //System.out.println("walk: " + i);
+            System.out.println("walk: " + i);
             walker.walk(space);
         }
         //set completion flag
