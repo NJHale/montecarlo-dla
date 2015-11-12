@@ -60,7 +60,7 @@ public class RadialWalker extends Walker {
         int bound = radius + buffer;
         //System.out.println("bound: " + bound);
         //System.out.println("Raw attempted : " + proj.i + " : " + proj.j);
-        if (r > bound) {
+        if (r >= bound) {
 //            //get the angle of incline
 //            double rads = Math.PI / 2;
 //            //check to see if x = 0
@@ -81,8 +81,8 @@ public class RadialWalker extends Walker {
             int dr = r - bound;
 
             //reflect in rectangular coordinates
-            proj.i = (int) (center + (Math.copySign(Math.abs(proj.i) - dr, proj.i) - center));
-            proj.j = (int) (center + (Math.copySign(Math.abs(proj.j) - dr, proj.j) - center));
+            proj.i = (int) (Math.copySign(Math.abs(proj.i) - dr, proj.i));
+            proj.j = (int) (Math.copySign(Math.abs(proj.j) - dr, proj.j));
 
             //correct if proj.i or proj.j lie outside the boundary
             if (proj.i >= space.size()) proj.i = space.size() - 1;
@@ -122,8 +122,8 @@ public class RadialWalker extends Walker {
                 int r = (int) distance(proj.j, proj.i, space.size()/2, space.size()/2);
                 //update the max radius of the aggregate if there is still room to expand
                 int bound = radius + buffer;
-                if ((bound < ((space.size() / 2) - 1) &&
-                        (r > radius))){
+                    if ((bound < ((space.size() / 2) - 1) &&
+                            (r > radius))){
                     radius = r;
                 }
                 //end walk
