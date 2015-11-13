@@ -13,9 +13,9 @@ public class ArrayAdjMatrix extends AdjMatrix {
      * @param m
      * @param n
      */
-    public ArrayAdjMatrix(int m, int n) {
-        matrix = new int[m][n];
-        for(int i = 0; i < m; i++) {
+    public ArrayAdjMatrix(int n) {
+        matrix = new int[n][n];
+        for(int i = 0; i < n; i++) {
             for(int j = 0; j < n; j++) {
                 matrix[i][j] = 0;
             }
@@ -30,5 +30,10 @@ public class ArrayAdjMatrix extends AdjMatrix {
     @Override
     public void set(int i, int j, int v) {
         matrix[i][j] = v;
+    }
+
+    @Override
+    public int size() {
+        return matrix.length;
     }
 }
