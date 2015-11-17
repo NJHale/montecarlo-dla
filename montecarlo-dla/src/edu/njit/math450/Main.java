@@ -18,8 +18,8 @@ public class Main {
         //hard code initial values for now
         long walkSeed = 7877877;
         long oriSeed = 7877877;
-        int n = 1000;
-        int walks = 100000;
+        int n = 2000;
+        int walks = 500000;
         int buffer = 3;
 	    //Attempt generic DumbWalker simulation
         Walker walker = new RadialWalker(oriSeed, walkSeed, 1, buffer);//new DumbWalker(walkSeed, stickSeed);

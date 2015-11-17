@@ -60,35 +60,10 @@ public class RadialWalker extends Walker {
         int bound = radius + buffer;
         //System.out.println("bound: " + bound);
         //System.out.println("Raw attempted : " + proj.i + " : " + proj.j);
-        if (r >= bound) {
-//            //get the angle of incline
-//            double rads = Math.PI / 2;
-//            //check to see if x = 0
-//            if (proj.j - center != 0) {
-//                rads = Math.atan((center - proj.i) / (center - proj.j));
-//            }
-//            //find how far over the boundary it was
-//            r = r - (r - bound);
-//            //System.out.println("rads: " + rads);
-//            if ((proj.j - center < 0 && proj.i - center > 0) ||
-//                    (proj.j - center < 0 && proj.i - center < 0)) {
-//                rads += Math.PI;
-//            }
-//            //reflect
-//            proj.i = (int) (center + r * Math.sin(rads + Math.PI));
-//            proj.j = (int) (center + r * Math.cos(rads + Math.PI));
-            //calculate the radius difference
-            int dr = r - bound;
-
-            //reflect in rectangular coordinates
-            proj.i = (int) (Math.copySign(Math.abs(proj.i) - dr, proj.i));
-            proj.j = (int) (Math.copySign(Math.abs(proj.j) - dr, proj.j));
-
-            //correct if proj.i or proj.j lie outside the boundary
-            if (proj.i >= space.size()) proj.i = space.size() - 1;
-            if (proj.i < 0) proj.i = 0;
-            if (proj.j >= space.size()) proj.j = space.size() - 1;
-            if (proj.j < 0) proj.j = 0;
+        if (r > bound) {
+            //reset locale
+            proj.i = locale.i;//set y
+            proj.j = locale.j;//set x
         }
         //System.out.println("Corrected attempted step: " + proj.i + " : " + proj.j);
         //return the projected Locale
