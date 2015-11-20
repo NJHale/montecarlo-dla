@@ -127,13 +127,13 @@ public class RadialWalker extends Walker {
         int n = space.size();
         //stick to the aggregate
         if (up >= 0  && space.get(up, proj.j) > 0)
-            return true;//rand.nextBoolean();
+            return rand.nextBoolean();
         if (down < n && space.get(down, proj.j) > 0)
-            return true;//rand.nextBoolean();
+            return rand.nextBoolean();
         if (left >= 0 && space.get(proj.i, left) > 0)
-            return true;//rand.nextBoolean();
+            return rand.nextBoolean();
         if (right < n && space.get(proj.i, right) > 0)
-            return true;//rand.nextBoolean();
+            return rand.nextBoolean();
         //otherwise the walker is still wandering in space
         return false;
     }
