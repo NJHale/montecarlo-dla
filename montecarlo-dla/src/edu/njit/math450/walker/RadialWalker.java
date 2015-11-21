@@ -157,20 +157,4 @@ public class RadialWalker extends Walker {
         //System.out.println("reOriginate i: " + locale.i + " j: " + locale.j + " bound: " + bound);
     }
 
-    /**
-     * Calculates and returns the Euclidean norm of the
-     * difference vector between two points (i, j) and (h, k)
-     * @param i x coord of (i, j)
-     * @param j y coord of (i, j)
-     * @param h x coord of (h, k)
-     * @param k y coord of (h, k)
-     *
-     * @return Euclidean norm of distance from (i, i) to (h, k)
-     */
-    public double distance(int i, int j, int h, int k) {
-        //calculate the distance
-        double dist = Math.sqrt(Math.pow((i - h), 2) //<- assume seed is centered in the space
-                + Math.pow((j - k), 2));
-        return dist;
-    }
 }
