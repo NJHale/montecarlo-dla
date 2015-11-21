@@ -91,4 +91,32 @@ public abstract class Walker {
     public void setWalkSeed(long walkSeed) {
         this.walkSeed = walkSeed;
     }
+
+    /**
+     * Calculates and returns the Euclidean norm of the
+     * difference vector between two points (i, j) and (h, k)
+     * @param i x coord of (i, j)
+     * @param j y coord of (i, j)
+     * @param h x coord of (h, k)
+     * @param k y coord of (h, k)
+     *
+     * @return Euclidean norm of distance from (i, i) to (h, k)
+     */
+    protected double distance(int i, int j, int h, int k) {
+        //calculate the distance
+        double dist = Math.sqrt(Math.pow((i - h), 2) //<- assume seed is centered in the space
+                + Math.pow((j - k), 2));
+        return dist;
+    }
+
+    /**
+     * Returns the number of neighbors in an neigh + 1 x neigh + 1
+     * square centered at the
+     * @param neig
+     * @param proj
+     * @return
+     */
+    protected int numNeig(int neig, Locale proj, AdjMatrix space) {
+        return 0;
+    }
 }

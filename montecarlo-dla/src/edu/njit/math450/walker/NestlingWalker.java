@@ -7,7 +7,7 @@ import java.util.Random;
 /**
  * Created by nhale on 11/5/2015.
  */
-public class RadialWalker extends Walker {
+public class NestlingWalker extends Walker {
 
     //Maximum radius away from the seed that the aggregate has reached
     protected int radius;
@@ -15,20 +15,23 @@ public class RadialWalker extends Walker {
     //Extra space given for the walkers to move in
     protected int buffer;
 
-    protected Random oriRand;
+    //neigh * neigh Neighborhood to nestle in
+    private int neigh;
 
     /**
      * Parameterized constructor creates a walker that walks from a radial
-     * boundary held closely off the max radius of the aggregate
+     * boundary held closely off the max radius of the aggregate and nestles
+     * in more highly populated regions
      * @param walkSeed Used to seed the pseudo-random walks across the space
      * @param radius Initial max radius of the aggregate
      * @param buffer Distance from the max radius to place the radial boundary
      */
-    public RadialWalker(long oriSeed, long walkSeed, int radius, int buffer) {
+    public NestlingWalker(long walkSeed, int radius,
+                          int buffer, int neigh) {
         super(walkSeed);
-        this.oriRand = new Random(oriSeed);
         this.radius = radius;
         this.buffer = buffer;
+        this.neigh = neigh;
     }
 
 
@@ -97,8 +100,8 @@ public class RadialWalker extends Walker {
                 int r = (int) distance(proj.j, proj.i, space.size()/2, space.size()/2);
                 //update the max radius of the aggregate if there is still room to expand
                 int bound = radius + buffer;
-                    if ((bound < ((space.size() / 2) - 1) &&
-                            (r > radius))){
+                if ((bound < ((space.size() / 2) - 1) &&
+                        (r > radius))){
                     radius = r;
                 }
                 //end walk
@@ -108,6 +111,10 @@ public class RadialWalker extends Walker {
             locale = proj;
         }
         //System.out.println("Walk complete!");
+    }
+
+    private Locale nestle(Locale proj) {
+
     }
 
     /**
@@ -127,13 +134,13 @@ public class RadialWalker extends Walker {
         int n = space.size();
         //stick to the aggregate
         if (up >= 0  && space.get(up, proj.j) > 0)
-            return rand.nextBoolean();
+            return true;//rand.nextBoolean();
         if (down < n && space.get(down, proj.j) > 0)
-            return rand.nextBoolean();
+            return true;//rand.nextBoolean();
         if (left >= 0 && space.get(proj.i, left) > 0)
-            return rand.nextBoolean();
+            return true;//rand.nextBoolean();
         if (right < n && space.get(proj.i, right) > 0)
-            return rand.nextBoolean();
+            return true;//rand.nextBoolean();
         //otherwise the walker is still wandering in space
         return false;
     }
@@ -146,7 +153,7 @@ public class RadialWalker extends Walker {
     @Override
     public void reOriginate(int n) {
         //create a random angle of inclination [0, 2*pi] (in radians)
-        double rads = 2 * Math.PI * oriRand.nextDouble();
+        double rads = 2 * Math.PI * rand.nextDouble();
         //double angle = (360 * rand.nextDouble()) * Math.PI / 180;
         //System.out.println(rads);
         //calculate the radial bound of the allowed walking area
@@ -156,5 +163,6 @@ public class RadialWalker extends Walker {
         locale.j = (int) (n/2 + (bound * Math.cos(rads)));
         //System.out.println("reOriginate i: " + locale.i + " j: " + locale.j + " bound: " + bound);
     }
+
 
 }

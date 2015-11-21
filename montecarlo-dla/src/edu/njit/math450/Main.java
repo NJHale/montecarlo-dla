@@ -7,7 +7,6 @@ import edu.njit.math450.walker.*;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
-import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 
@@ -18,10 +17,10 @@ public class Main {
         //hard code initial values for now
         long walkSeed = 7877877;
         long oriSeed = 7877877;
-        int n = 2000;
-        int walks = 500000;
+        int n = 1000;
+        int walks = 100000;
         int buffer = 3;
-	    //Attempt generic DumbWalker simulation
+	    //Attempt walker simulation
         Walker walker = new RadialWalker(oriSeed, walkSeed, 1, buffer);//new DumbWalker(walkSeed, stickSeed);
         //instantiate the walk space
         AdjMatrix space = new ArrayAdjMatrix(n);
