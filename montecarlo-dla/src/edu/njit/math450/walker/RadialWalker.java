@@ -12,10 +12,9 @@ public class RadialWalker extends Walker {
     //Maximum radius away from the seed that the aggregate has reached
     protected int radius;
 
-    //Extra space given for the walkers to move in
-    protected int buffer;
-
     protected Random oriRand;
+
+    protected static int walkNum = 0;
 
     /**
      * Parameterized constructor creates a walker that walks from a radial
@@ -78,7 +77,8 @@ public class RadialWalker extends Walker {
      */
     @Override
     public void walk(AdjMatrix space) {
-        //System.out.println("boundary: " + radius + buffer);
+        // increment the walk number
+        walkNum++;
         //relocate the walker to a boundary
         reOriginate(space.size());
         //declare the projected Locale
@@ -91,8 +91,8 @@ public class RadialWalker extends Walker {
             proj = step(space);
             //check sticking condition
             if (willStick(proj, space)) {
-                //update the space
-                space.set(proj.i, proj.j, space.get(proj.i, proj.j) + 1);
+                //update the space to reflect the walk number
+                space.set(proj.i, proj.j, walkNum);
                 //calculate and truncate distance from the seed (euclidean norm)
                 int r = (int) distance(proj.j, proj.i, space.size()/2, space.size()/2);
                 //update the max radius of the aggregate if there is still room to expand
@@ -107,7 +107,6 @@ public class RadialWalker extends Walker {
             //set the Walker's locale to projected
             locale = proj;
         }
-        //System.out.println("Walk complete!");
     }
 
     /**
@@ -127,13 +126,13 @@ public class RadialWalker extends Walker {
         int n = space.size();
         //stick to the aggregate
         if (up >= 0  && space.get(up, proj.j) > 0)
-            return rand.nextBoolean();
+            return true;//rand.nextBoolean();
         if (down < n && space.get(down, proj.j) > 0)
-            return rand.nextBoolean();
+            return true;rand.nextBoolean();
         if (left >= 0 && space.get(proj.i, left) > 0)
-            return rand.nextBoolean();
+            return true;rand.nextBoolean();
         if (right < n && space.get(proj.i, right) > 0)
-            return rand.nextBoolean();
+            return true;rand.nextBoolean();
         //otherwise the walker is still wandering in space
         return false;
     }

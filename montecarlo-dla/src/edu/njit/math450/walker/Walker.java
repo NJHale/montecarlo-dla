@@ -20,6 +20,8 @@ public abstract class Walker {
         }
     }
 
+    protected int buffer;
+
     protected Random rand;
 
     protected Locale locale;
@@ -111,12 +113,41 @@ public abstract class Walker {
 
     /**
      * Returns the number of neighbors in an neigh + 1 x neigh + 1
-     * square centered at the
-     * @param neig
-     * @param proj
-     * @return
+     * square centered at the given projected locale
+     * @param neig Dimensions of the square neighborhood to check
+     * @param proj Projected location (assumed empty)
+     * @return Number of neighbors in the neighborhood of the projected locale
      */
     protected int numNeig(int neig, Locale proj, AdjMatrix space) {
-        return 0;
+        int neighbors = 0;
+        // scan the block for neighbors starting at top left
+        for (int i = (proj.i - neig / 2); i < space.size(); i++) {
+            for (int j = (proj.j - neig / 2); j < space.size(); j++) {
+                // check if we have found a marked locale within the space
+                if (i >= 0 && j >= 0 && space.get(i, j) > 0) {
+                    // if we have we can count as a neigbor
+                    neighbors++;
+                }
+            }
+        }
+        // return the number of neighbors
+        return neighbors;
     }
+
+    /**
+     *
+     * @return
+     */
+    public long getWalkSeed() {
+        return walkSeed;
+    }
+
+    /**
+     *
+     * @return
+     */
+    public long getBuffer() {
+        return buffer;
+    }
+
 }

@@ -31,7 +31,7 @@ public abstract class AdjMatrix {
     /**
      * Rasterizes the AdjMatrix into a
      * BufferedImage, pixel by pixel and
-     * returns the result
+     * returns the resulting image
      * @param hue integer value of hue to rasterize matrix with
      * @return Rasterization of the AdjMatrix
      */
@@ -44,7 +44,7 @@ public abstract class AdjMatrix {
                 int r = (int) Math.sqrt(Math.pow((size()/2 - i), 2) +
                         Math.pow((size()/2 - j), 2));
                 //calculate color palette based on value at (i, j)
-                int palette = (int) ((Math.exp(r) + hue) % 16777215) * get(i, j);
+                int palette = get(i, j);//r * get(i, j);//(int) ((Math.exp(r) + hue) % 16777215) * get(i, j);
                 img.setRGB(i, j, palette);
             }
         }
