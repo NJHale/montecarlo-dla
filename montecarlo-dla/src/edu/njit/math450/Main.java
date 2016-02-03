@@ -20,8 +20,13 @@ public class Main {
         int n = 1000;
         int walks = 100000;
         int buffer = 3;
+        double A = 1;
+        double B = .5;
+        double C = .01;
+        double L = 9;
 	    //Attempt walker simulation
-        Walker walker = new RadialWalker(oriSeed, walkSeed, 1, buffer);//new DumbWalker(walkSeed, stickSeed);
+        Walker walker = new RadialWalker(oriSeed, walkSeed, 1,
+                buffer, A, B, C, L);//new DumbWalker(walkSeed, stickSeed);
         //Walker walker = new DumbWalker(walkSeed, walkSeed);
         //instantiate the walk space
         AdjMatrix space = new ArrayAdjMatrix(n);
@@ -43,7 +48,7 @@ public class Main {
             System.err.println("An error occurred while attempting to store the " +
                     "DLA in a png");
         }
-//
+
         JFrame frame = new JFrame("DLA");
         //set the scaling factor
         int scale = 1;
