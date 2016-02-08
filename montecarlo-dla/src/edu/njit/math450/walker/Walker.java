@@ -9,12 +9,15 @@ import edu.njit.math450.matrix.*;
  */
 public abstract class Walker {
 
+    protected static int[] deltaRow = {0, -1, -1, -1, 0, 1, 1, 1};
+    protected static int[] deltaCol = {1, 1, 0, -1, -1, -1, 0, 1};
+
     protected class Locale {
         public int i, j;
 
         public Locale() {}
 
-        public Locale(Locale local) {
+        public Locale(Locale locale) {
             i = locale.i;
             j = locale.j;
         }
@@ -132,6 +135,29 @@ public abstract class Walker {
         }
         // return the number of neighbors
         return neighbors;
+    }
+
+    /**
+     * Checks if the given projection will form a hole on walker stick
+     * @param proj projected locale to check
+     * @param space adjacency matrix of the space
+     * @return true if a walker at proj will form a hole; false otherwise
+     */
+    protected Boolean makesHole(Locale proj, AdjMatrix space) {
+        // get the current state
+        int curState = space.get(proj.i + 1, proj.j + 1);
+        // initialize flip count
+        int flips = 0;
+        // look over each array (ALWAYS size 8)
+        for (int i = 0; i < 8; i++) {
+            if (curState != space.get(proj.i + deltaRow[i], proj.j + deltaCol[i])) {
+                flips++;
+                curState = space.get(proj.i + deltaRow[i], proj.j + deltaCol[i]);
+            }
+        }
+        // check to see if we've flipped 4 times which indicates a forming hole
+        return flips >= 4;
+
     }
 
     /**

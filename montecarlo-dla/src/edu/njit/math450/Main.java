@@ -25,7 +25,7 @@ public class Main {
         double C = .01;
         double L = 9;
 	    //Attempt walker simulation
-        Walker walker = new RadialWalker(oriSeed, walkSeed, 1,
+        Walker walker = new RadialWalker(oriSeed, walkSeed, 3,
                 buffer, A, B, C, L);//new DumbWalker(walkSeed, stickSeed);
         //Walker walker = new DumbWalker(walkSeed, walkSeed);
         //instantiate the walk space

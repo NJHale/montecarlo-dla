@@ -35,7 +35,12 @@ public class DLASimulation {
         int n = space.size();
         //place the seed (should be around (1/2)*(n, n)th entry)
         int seed = (int) n / 2;
-        space.set(seed, seed, 1);
+        int seedSize = 2;
+        for (int i = seed - seedSize / 2; i <= seed + seedSize / 2; i++) {
+            for (int j = seed - seedSize / 2; j <= seed + seedSize / 2; j++) {
+                space.set(i, j, 1);
+            }
+        }
         //traverse the space adding zeros to non-seed area
         /*
         for (int i = 0; i < n; i++) {

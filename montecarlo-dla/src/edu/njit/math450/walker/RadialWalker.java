@@ -88,6 +88,7 @@ public class RadialWalker extends Walker {
     public void walk(AdjMatrix space) {
         // increment the walk number
         walkNum++;
+        System.out.println("WalkNum: " + walkNum);
         //relocate the walker to a boundary
         reOriginate(space.size());
         //declare the projected Locale
@@ -103,16 +104,22 @@ public class RadialWalker extends Walker {
                 // update the space to reflect the walk number
                 Locale oldProj = new Locale(proj);
                 // settle until two consecutive projections are
-//                while (true) {
-//                    System.out.println("here");
-//                    proj = settle(proj, space);
-//                    System.out.println("proj i: " + proj.i + " proj j:" + proj.j);
-//                    if (proj.i == oldProj.i && proj.j == oldProj.j) {
-//                        break;
-//                    }
-//                    oldProj = new Locale(proj);
-//                }
-                proj = settle(proj, space);
+                while (true) {
+                    proj = settle(proj, space);
+                    if (proj.i == oldProj.i && proj.j == oldProj.j) {
+                        //System.out.println("We've found a consecutive settlement!");
+                        break;
+                    }
+                    oldProj = new Locale(proj);
+                }
+                // check to see if we've formed a hole
+                if (makesHole(proj, space)) {
+                    reOriginate(space.size());
+                    // don't stick
+                    //System.out.println("Continued!!!");
+                    continue;
+                }
+                //System.out.println("MADE IT PAST HOLE PREVENT!!!");
                 space.set(proj.i, proj.j, walkNum);
                 //calculate and truncate distance from the seed (euclidean norm)
                 int r = (int) distance(proj.j, proj.i, space.size()/2, space.size()/2);
@@ -147,7 +154,7 @@ public class RadialWalker extends Walker {
         prospect.j = settlement.j;
 
         // number of ties
-        int numTied = 0;
+        int numTied = 1;
 
         // scan the block for neighbors starting at top left
         for (int i = (proj.i - 1); i <= proj.i + 1 && i < space.size(); i++) {
@@ -161,15 +168,14 @@ public class RadialWalker extends Walker {
                     int numNeig = numNeig(1, prospect, space);
                     if (numNeig > maxNeig) {
                         // clear the ties count
-                        numTied = 0;
+                        numTied = 1;
                         maxNeig = numNeig;
                         settlement.i = prospect.i;
                         settlement.j = prospect.j;
                     } else if (numNeig == maxNeig) {
                         // handle all ties so far
                         numTied++;
-                        if (rand.nextDouble() < 1 / numTied) {
-                            maxNeig = numNeig;
+                        if (rand.nextInt(numTied) == 0) {
                             settlement.i = prospect.i;
                             settlement.j = prospect.j;
                         }
