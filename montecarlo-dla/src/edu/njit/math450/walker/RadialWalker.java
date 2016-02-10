@@ -19,6 +19,8 @@ public class RadialWalker extends Walker {
     // sticking probabilities
     protected double A, B, C, L;
 
+    protected Boolean nonNewtFlag;
+
     /**
      * Parameterized constructor creates a walker that walks from a radial
      * boundary held closely off the max radius of the aggregate
@@ -27,7 +29,7 @@ public class RadialWalker extends Walker {
      * @param buffer Distance from the max radius to place the radial boundary
      */
     public RadialWalker(long oriSeed, long walkSeed, int radius, int buffer,
-                        double A, double B, double C, double L) {
+                        double A, double B, double C, double L, Boolean nonNewtFlag) {
         super(walkSeed);
         // initialize stick probs
         this.A = A;
@@ -37,6 +39,7 @@ public class RadialWalker extends Walker {
         this.oriRand = new Random(oriSeed);
         this.radius = radius;
         this.buffer = buffer;
+        this.nonNewtFlag = nonNewtFlag;
     }
 
 
@@ -68,7 +71,7 @@ public class RadialWalker extends Walker {
         int bound = radius + buffer;
         //System.out.println("bound: " + bound);
         //System.out.println("Raw attempted : " + proj.i + " : " + proj.j);
-        if (r > bound) {
+        if (r > bound || space.get(proj.i, proj.j) > 0) {
             //reset locale
             proj.i = locale.i;//set y
             proj.j = locale.j;//set x
@@ -120,6 +123,7 @@ public class RadialWalker extends Walker {
                     continue;
                 }
                 //System.out.println("MADE IT PAST HOLE PREVENT!!!");
+
                 space.set(proj.i, proj.j, walkNum);
                 //calculate and truncate distance from the seed (euclidean norm)
                 int r = (int) distance(proj.j, proj.i, space.size()/2, space.size()/2);
@@ -159,7 +163,7 @@ public class RadialWalker extends Walker {
         // scan the block for neighbors starting at top left
         for (int i = (proj.i - 1); i <= proj.i + 1 && i < space.size(); i++) {
             for (int j = (proj.j - 1); j <= proj.j + 1 && j < space.size(); j++) {
-                // check if we have found a marked locale within the space
+                // check if we have found a unmarked locale within the space
                 if (i >= 0 && j >= 0 && space.get(i, j) == 0) {
                     // we've found a possible settling location
                     prospect.i = i;
@@ -222,13 +226,30 @@ public class RadialWalker extends Walker {
         // calculate number of neigs in a 9x9
         int neig = 4;
         int numNeig = numNeig(neig, proj, space);
-        // calculate newtonian prob
-        double newtProb = A * (numNeig / L / L - (L - 1) / (2 * L)) + B;
-        // catch negative probs?
-        if (newtProb < C) {
-            newtProb = C;
+
+        double prob = A * (numNeig / L / L - (L - 1) / (2 * L)) + B;
+
+        if (nonNewtFlag) {
+            int maxWalkNum = 0;
+            // scan the block for neighbors starting at top left
+            for (int i = (proj.i - 1); i <= proj.i + 1 && i < space.size(); i++) {
+                for (int j = (proj.j - 1); j <= proj.j + 1 && j < space.size(); j++) {
+                    // check if we have found a marked locale within the space
+                    if (i >= 0 && j >= 0 && space.get(i, j) > 0) {
+                        // get the max walk num
+                        if (space.get(i, j) > maxWalkNum) {
+                            maxWalkNum = space.get(i, j);
+                        }
+                    }
+                }
+            }
+            prob *= Math.pow(walkNum, .5) / (walkNum - maxWalkNum);
         }
-        return newtProb;
+        // catch negative probs?
+        if (prob < C) {
+            prob = C;
+        }
+        return prob;
     }
 
     /**

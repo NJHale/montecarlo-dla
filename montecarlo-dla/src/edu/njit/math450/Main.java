@@ -20,13 +20,13 @@ public class Main {
         int n = 1000;
         int walks = 100000;
         int buffer = 3;
-        double A = 1;
-        double B = .5;
+        double A = 2;
+        double B = .15;
         double C = .01;
         double L = 9;
 	    //Attempt walker simulation
         Walker walker = new RadialWalker(oriSeed, walkSeed, 3,
-                buffer, A, B, C, L);//new DumbWalker(walkSeed, stickSeed);
+                buffer, A, B, C, L, true);//new DumbWalker(walkSeed, stickSeed);
         //Walker walker = new DumbWalker(walkSeed, walkSeed);
         //instantiate the walk space
         AdjMatrix space = new ArrayAdjMatrix(n);
@@ -37,7 +37,7 @@ public class Main {
         System.out.println(walks + " random walks completed in " +
                 (System.currentTimeMillis() - start) + " ms");
         //rasterize the dla and store the image
-        int hue = 100;
+        int hue = 0xffffff;
         BufferedImage dlaImg = space.rasterize(hue);
         //attempt write the image to a file
         try {

@@ -17,6 +17,11 @@ public abstract class Walker {
 
         public Locale() {}
 
+        public Locale(int i, int j) {
+            this.i = i;
+            this.j = j;
+        }
+
         public Locale(Locale locale) {
             i = locale.i;
             j = locale.j;
@@ -150,7 +155,7 @@ public abstract class Walker {
         int flips = 0;
         // look over each array (ALWAYS size 8)
         for (int i = 0; i < 8; i++) {
-            if (curState != space.get(proj.i + deltaRow[i], proj.j + deltaCol[i])) {
+            if ((curState > 0) != (space.get(proj.i + deltaRow[i], proj.j + deltaCol[i]) > 0)) {
                 flips++;
                 curState = space.get(proj.i + deltaRow[i], proj.j + deltaCol[i]);
             }
