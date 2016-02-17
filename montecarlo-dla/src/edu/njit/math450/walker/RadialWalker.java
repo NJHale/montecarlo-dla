@@ -20,6 +20,9 @@ public class RadialWalker extends Walker {
     // sticking probabilities
     protected double A, B, C, L;
 
+    // non-newtonian sticking probabilities
+    protected double Cnn, alpha;
+
     protected Boolean nonNewtFlag;
 
 //    // track the average squared velocity
@@ -36,7 +39,7 @@ public class RadialWalker extends Walker {
      * @param buffer Distance from the max radius to place the radial boundary
      */
     public RadialWalker(long oriSeed, long walkSeed, int radius, int buffer,
-                        double A, double B, double C, double L, Boolean nonNewtFlag) {
+                        double A, double B, double C, double L) {
         super(walkSeed);
         // initialize stick probs
         this.A = A;
@@ -46,7 +49,36 @@ public class RadialWalker extends Walker {
         this.oriRand = new Random(oriSeed);
         this.radius = radius;
         this.buffer = buffer;
-        this.nonNewtFlag = nonNewtFlag;
+        this.nonNewtFlag = false;
+    }
+
+    /**
+     * Overloaded Constructor for non-newtonian Radial Walker!
+     * @param oriSeed
+     * @param walkSeed
+     * @param radius
+     * @param buffer
+     * @param A
+     * @param B
+     * @param C
+     * @param L
+     * @param Cnn
+     * @param alpha
+     */
+    public RadialWalker(long oriSeed, long walkSeed, int radius, int buffer,
+                        double A, double B, double C, double L, double Cnn, double alpha) {
+        super(walkSeed);
+        // initialize stick probs
+        this.A = A;
+        this.B = B;
+        this.C = C;
+        this.L = L;
+        this.oriRand = new Random(oriSeed);
+        this.radius = radius;
+        this.buffer = buffer;
+        this.nonNewtFlag = true;
+        this.Cnn = Cnn;
+        this.alpha = alpha;
     }
 
 
@@ -267,6 +299,7 @@ public class RadialWalker extends Walker {
 //                    }
 //                }
 //            }
+            System.out.println("Newtonian Stick Prob: " + prob);
             prob+=nonNewtCorrection;
         }
         // catch negative probs?
@@ -293,6 +326,14 @@ public class RadialWalker extends Walker {
         locale.i = (int) (n/2 + (bound * Math.sin(rads)));
         locale.j = (int) (n/2 + (bound * Math.cos(rads)));
         //System.out.println("reOriginate i: " + locale.i + " j: " + locale.j + " bound: " + bound);
+    }
+
+    public double getA() {
+        return A;
+    }
+
+    public double getB() {
+        return B;
     }
 
 }

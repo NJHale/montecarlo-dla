@@ -2,8 +2,10 @@ package edu.njit.math450.dla;
 
 import edu.njit.math450.matrix.AdjMatrix;
 import edu.njit.math450.util.DLAUtil;
+import edu.njit.math450.walker.RadialWalker;
 import edu.njit.math450.walker.Walker;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -75,7 +77,6 @@ public class DLASimulation {
             for (int i = 0; i < walks; i++) {
                 walker.walk(space);
                 if (i % filter == 0) {
-
                     // calculate the average velocity over the whole boundary
                     // this is resource intensive, don't do this in the final simulation
                     double[] averageVel2=new double[2];
@@ -86,7 +87,7 @@ public class DLASimulation {
                     for(int i1=0;i1<space.size();i1++) {
                         for(int j1=0;j1<space.size();j1++) {
                             if(space.get(i1,j1)>0) {
-                                double age=space.get(i1,j1); // implied cast to double
+                                double age = (i + 3) - space.get(i1,j1); // implied cast to double
                                 double[] vel = new double[2]; // stores velocity as components x,y
                                 // check left and right
                                 // if one is occupied and the other isn't
@@ -121,13 +122,23 @@ public class DLASimulation {
                     //set the scaling factor
                     int scale = 1;
                     //render the space on a JFrame
-                    JPanel dlaPanel = new DLAPanel(dlaImg, scale);
-                    frame.setSize(space.size()*scale, space.size()*scale);
-                    frame.setContentPane(dlaPanel);
-                    //make the frame's content visible
-                    frame.setVisible(true);
-                    //set the default close op
-                    frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+//                    JPanel dlaPanel = new DLAPanel(dlaImg, scale);
+//                    frame.setSize(space.size()*scale, space.size()*scale);
+//                    frame.setContentPane(dlaPanel);
+//                    //make the frame's content visible
+//                    frame.setVisible(true);
+//                    //set the default close op
+//                    frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+                    //attempt write the image to a file
+                    try {
+                        File out = new File("images/dla-Size" + space.size() + "-Seed" + walker.getWalkSeed() +
+                                "-A" + ((RadialWalker)walker).getA() + "-B" + ((RadialWalker)walker).getB()
+                                + "-" + i + ".png");
+                        ImageIO.write(dlaImg, "png", out);
+                    } catch (Exception e) {
+                        System.err.println("An error occurred while attempting to store the " +
+                                "DLA in a png");
+                    }
                 }
             }
             // close the PrintWriter
