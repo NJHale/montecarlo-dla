@@ -80,6 +80,8 @@ public class DLASimulation {
                     // this is resource intensive, don't do this in the final simulation
                     double[] averageVel2=new double[2];
                     int[] numVel2Measured=new int[2];
+                    double averageSpd=0;
+                    int numSpdMeasured=0;
 
                     for(int i1=0;i1<space.size();i1++) {
                         for(int j1=0;j1<space.size();j1++) {
@@ -103,11 +105,12 @@ public class DLASimulation {
                                 if(vel[0]!=0 || vel[1]!=0) {
                                     averageVel2[0] = (averageVel2[0] * numVel2Measured[0] + vel[0] * vel[0]) / (++numVel2Measured[0]);
                                     averageVel2[1] = (averageVel2[1] * numVel2Measured[1] + vel[1] * vel[1]) / (++numVel2Measured[1]);
+                                    averageSpd = (averageSpd + Math.pow(vel[0]*vel[0]+vel[1]*vel[1],0.5)) / (++numSpdMeasured);
                                 }
                             }
                         }
                     }
-                    System.out.println(averageVel2[0]+" "+averageVel2[1]);
+                    System.out.println(averageSpd+" "+numSpdMeasured+" "+i);
 
 
                     //double fDim = DLAUtil.fractalDim(space);
