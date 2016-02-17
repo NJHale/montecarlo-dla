@@ -34,7 +34,7 @@ public class DLASimulation {
     public DLASimulation(AdjMatrix space, Walker walker) {
         int n = space.size();
         //place the seed (should be around (1/2)*(n, n)th entry)
-        int seed = (int) n / 2;
+        int seed = n / 2; // integer division
         int seedSize = 2;
         for (int i = seed - seedSize / 2; i <= seed + seedSize / 2; i++) {
             for (int j = seed - seedSize / 2; j <= seed + seedSize / 2; j++) {
@@ -75,6 +75,41 @@ public class DLASimulation {
             for (int i = 0; i < walks; i++) {
                 walker.walk(space);
                 if (i % filter == 0) {
+
+                    // calculate the average velocity over the whole boundary
+                    // this is resource intensive, don't do this in the final simulation
+                    double[] averageVel2=new double[2];
+                    int[] numVel2Measured=new int[2];
+
+                    for(int i1=0;i1<space.size();i1++) {
+                        for(int j1=0;j1<space.size();j1++) {
+                            if(space.get(i1,j1)>0) {
+                                double age=space.get(i1,j1); // implied cast to double
+                                double[] vel = new double[2]; // stores velocity as components x,y
+                                // check left and right
+                                // if one is occupied and the other isn't
+                                if(space.get(i1-1,j1)>0 && !(space.get(i1+1,j1)>0)) {
+                                    vel[0]=1/age;
+                                } else if (space.get(i1+1,j1)>0 && !(space.get(i1-1,j1)>0)) {
+                                    vel[0]=-1/age;
+                                }
+                                // check top and bottom
+                                if(space.get(i1,j1-1)>0 && !(space.get(i1,j1+1)>0)) {
+                                    vel[1]=1/age;
+                                } else if (space.get(i1,j1+1)>0 && !(space.get(i1,j1-1)>0)) {
+                                    vel[1]=-1/age;
+                                }
+
+                                if(vel[0]!=0 || vel[1]!=0) {
+                                    averageVel2[0] = (averageVel2[0] * numVel2Measured[0] + vel[0] * vel[0]) / (++numVel2Measured[0]);
+                                    averageVel2[1] = (averageVel2[1] * numVel2Measured[1] + vel[1] * vel[1]) / (++numVel2Measured[1]);
+                                }
+                            }
+                        }
+                    }
+                    System.out.println(averageVel2[0]+" "+averageVel2[1]);
+
+
                     //double fDim = DLAUtil.fractalDim(space);
                     //System.out.println("Walks : " + i + " fractal dimension : " + fDim);
                     //writer.write("Walks : " + i + " fractal dimension : " + fDim + "\n");

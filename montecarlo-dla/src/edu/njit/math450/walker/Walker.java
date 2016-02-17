@@ -26,6 +26,11 @@ public abstract class Walker {
             i = locale.i;
             j = locale.j;
         }
+
+        public void setCoords(int i, int j) {
+            this.i=i;
+            this.j=j;
+        }
     }
 
     protected int buffer;
@@ -62,8 +67,10 @@ public abstract class Walker {
     /**
      * Generates the next projected locale for the walker
      * to occupy. 'Steps' through the space.
-     * @param space
-     * @return
+     * @param space Adjacency matrix that represents the
+     *              topography of the space being walked on
+     * @return the next projected locale for the walker
+     *              to occupy.
      */
     protected abstract Locale step(AdjMatrix space);
 
@@ -96,7 +103,7 @@ public abstract class Walker {
     /**
      * Sets the pseudo-random number generator's seed
      * to determine the walk direction at each step
-     * @param walkSeed
+     * @param walkSeed walkSeed of the random walk
      */
     public void setWalkSeed(long walkSeed) {
         this.walkSeed = walkSeed;
@@ -133,7 +140,7 @@ public abstract class Walker {
             for (int j = (proj.j - neig); j <= proj.j + neig && j < space.size(); j++) {
                 // check if we have found a marked locale within the space
                 if (i >= 0 && j >= 0 && space.get(i, j) > 0) {
-                    // if we have we can count as a neigbor
+                    // if we have we can count as a neighbor
                     neighbors++;
                 }
             }
@@ -167,7 +174,7 @@ public abstract class Walker {
 
     /**
      *
-     * @return
+     * @return walkSeed of the random walk
      */
     public long getWalkSeed() {
         return walkSeed;

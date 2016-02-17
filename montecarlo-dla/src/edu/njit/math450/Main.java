@@ -15,8 +15,8 @@ public class Main {
     public static void main(String[] args) {
         System.out.println("Starting Simulation!");
         //hard code initial values for now
-        long walkSeed = 8009832;
-        long oriSeed = 9008932;
+        long walkSeed = 233;//8009832;
+        long oriSeed = 332;//9008932;
         int n = 1000;
         int walks = 100000;
         int buffer = 3;
@@ -60,15 +60,5 @@ public class Main {
         frame.setVisible(true);
         //set the default close op
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
-    }
-
-    /**
-     * Returns value a as is
-     * @param a value to return
-     * @return the same input param you passed
-     */
-    public int returnValue(int a) {
-        return a;
     }
 }

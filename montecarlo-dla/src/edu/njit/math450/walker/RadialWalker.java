@@ -14,12 +14,19 @@ public class RadialWalker extends Walker {
 
     protected Random oriRand;
 
-    protected int walkNum = 0;
+    // initialize to 1 to distinguish from seed
+    protected int walkNum = 1;
 
     // sticking probabilities
     protected double A, B, C, L;
 
     protected Boolean nonNewtFlag;
+
+//    // track the average squared velocity
+//    protected double[] averageVel2=new double[2];
+//    // number of speeds averaged so far
+//    protected int[] numVel2Measured =new int[2];
+
 
     /**
      * Parameterized constructor creates a walker that walks from a radial
@@ -63,7 +70,7 @@ public class RadialWalker extends Walker {
         proj.i = locale.i + (int) Math.pow(-1, shift) * (1 - axis);
         proj.j = locale.j + (int) Math.pow(-1, shift) * axis;
         //System.out.println("Raw attempted : " + proj.i + " : " + proj.j);
-        int center = (int) (space.size() / 2);
+        int center = space.size() / 2; // integer division
         //calculate and truncate distance from the seed (euclidean norm)
         int r = (int) distance(proj.j, proj.i, center, center);
         //System.out.println("r: " + r);
@@ -91,11 +98,11 @@ public class RadialWalker extends Walker {
     public void walk(AdjMatrix space) {
         // increment the walk number
         walkNum++;
-        System.out.println("WalkNum: " + walkNum);
+        //System.out.println("WalkNum: " + walkNum);
         //relocate the walker to a boundary
         reOriginate(space.size());
         //declare the projected Locale
-        Locale proj = null;
+        Locale proj;
         //set the walking flag
         Boolean walking = true;
         //step over the space until a sticking condition is met
@@ -143,19 +150,16 @@ public class RadialWalker extends Walker {
 
     /**
      *
-     * @param proj
-     * @param space
-     * @return
+     * @param proj represents the walker's projected locale
+     * @param space n x n Adjacency matrix that represents the
+     *              topography of the space being walked on
+     * @return the locale that the walker should settle into
      */
     protected Locale settle(Locale proj, AdjMatrix space) {
         // instantiate the maximum neighbored open locale
         int maxNeig = 0;
-        Locale settlement = new Locale();
-        Locale prospect = new Locale();
-        settlement.i = proj.i;
-        settlement.j = proj.j;
-        prospect.i = settlement.i;
-        prospect.j = settlement.j;
+        Locale settlement = new Locale(proj.i,proj.j);
+        Locale prospect = new Locale(settlement.i,settlement.j);
 
         // number of ties
         int numTied = 1;
@@ -166,22 +170,19 @@ public class RadialWalker extends Walker {
                 // check if we have found a unmarked locale within the space
                 if (i >= 0 && j >= 0 && space.get(i, j) == 0) {
                     // we've found a possible settling location
-                    prospect.i = i;
-                    prospect.j = j;
+                    prospect.setCoords(i,j);
                     // calculate the number of neighbors
                     int numNeig = numNeig(1, prospect, space);
                     if (numNeig > maxNeig) {
                         // clear the ties count
                         numTied = 1;
                         maxNeig = numNeig;
-                        settlement.i = prospect.i;
-                        settlement.j = prospect.j;
+                        settlement.setCoords(prospect.i,prospect.j);
                     } else if (numNeig == maxNeig) {
                         // handle all ties so far
                         numTied++;
                         if (rand.nextInt(numTied) == 0) {
-                            settlement.i = prospect.i;
-                            settlement.j = prospect.j;
+                            settlement.setCoords(prospect.i,prospect.j);
                         }
                     }
 
@@ -218,9 +219,10 @@ public class RadialWalker extends Walker {
 
     /**
      *
-     * @param space
-     * @param proj
-     * @return
+     * @param proj represents the walker's projected locale
+     * @param space n x n Adjacency matrix that represents the
+     *              topography of the space being walked on
+     * @return the probability of sticking at the projected locale
      */
     private double stickProb(Locale proj, AdjMatrix space) {
         // calculate number of neigs in a 9x9
@@ -230,20 +232,42 @@ public class RadialWalker extends Walker {
         double prob = A * (numNeig / L / L - (L - 1) / (2 * L)) + B;
 
         if (nonNewtFlag) {
-            int maxWalkNum = 0;
-            // scan the block for neighbors starting at top left
-            for (int i = (proj.i - 1); i <= proj.i + 1 && i < space.size(); i++) {
-                for (int j = (proj.j - 1); j <= proj.j + 1 && j < space.size(); j++) {
-                    // check if we have found a marked locale within the space
-                    if (i >= 0 && j >= 0 && space.get(i, j) > 0) {
-                        // get the max walk num
-                        if (space.get(i, j) > maxWalkNum) {
-                            maxWalkNum = space.get(i, j);
-                        }
-                    }
-                }
-            }
-            prob *= Math.pow(walkNum, .5) / (walkNum - maxWalkNum);
+            double nonNewtCorrection=0;
+//            int maxWalkNum = 0;
+//            // scan the block for neighbors starting at top left
+//            for (int i = (proj.i - 1); i <= proj.i + 1 && i < space.size(); i++) {
+//                for (int j = (proj.j - 1); j <= proj.j + 1 && j < space.size(); j++) {
+//                    // check if we have found a marked locale within the space
+//                    if (i >= 0 && j >= 0 && space.get(i, j) > 0) {
+//                        // get the max walk num
+//                        if (space.get(i, j) > maxWalkNum) {
+//                            maxWalkNum = space.get(i, j);
+//                        }
+//                    }
+//                }
+//            }
+//            prob *= Math.pow(walkNum, .5) / (walkNum - maxWalkNum);
+
+
+
+//            // check opposite location from each adjacent neighbor
+//            // scan the block for neighbors starting at top left
+//            for (int i = (proj.i - 1); i <= proj.i + 1 && i < space.size(); i++) {
+//                for (int j = (proj.j - 1); j <= proj.j + 1 && j < space.size(); j++) {
+//                    // check if we have found a marked locale within the space
+//                    if (i >= 0 && j >= 0 && space.get(i, j) > 0) {
+////                        // check that the locale opposite from our current location within the locale is filled
+////                        if(2*proj.i-i>=0 && 2*proj.j-j>=0 && space.get(2*proj.i-i,2*proj.j-j)>0) {
+////                            // find difference between the walk numbers
+////                        }
+//
+//                        // adjust velocity based on adjacent neighbor
+//                        vel[0]+=(proj.i-i)/(double)(walkNum-space.get(i, j));
+//                        vel[1]+=(proj.j-j)/(double)(walkNum-space.get(i, j));
+//                    }
+//                }
+//            }
+            prob+=nonNewtCorrection;
         }
         // catch negative probs?
         if (prob < C) {
