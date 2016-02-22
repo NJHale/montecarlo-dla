@@ -282,22 +282,22 @@ public class RadialWalker extends Walker {
             if((space.get(proj.i-1,proj.j)>0)!=(space.get(proj.i+1,proj.j)>0)) {
                 // find stuck walker on the left
                 if (proj.i - 1 > 0 && space.get(proj.i - 1, proj.j) > 0) {
-                    vel[0] += 1 / (double) (space.get(proj.i - 1, proj.j));
+                    vel[0] += 1 / (double) (walkNum-space.get(proj.i - 1, proj.j));
                 }
                 // find stuck walker on the right
                 if (proj.i + 1 > 0 && space.get(proj.i + 1, proj.j) > 0) {
-                    vel[0] -= 1 / (double) (space.get(proj.i + 1, proj.j));
+                    vel[0] -= 1 / (double) (walkNum-space.get(proj.i + 1, proj.j));
                 }
             }
             // check that walker has one on top, but not on bottom(or vice versa)
             if((space.get(proj.i,proj.j-1)>0)!=(space.get(proj.i,proj.j+1)>0)) {
                 // find stuck walker on the top
                 if (proj.j + 1 > 0 && space.get(proj.i, proj.j + 1) > 0) {
-                    vel[1] -= 1 / (double) (space.get(proj.i, proj.j + 1));
+                    vel[1] -= 1 / (double) (walkNum-space.get(proj.i, proj.j + 1));
                 }
                 // walker stuck to the left
                 if (proj.j - 1 > 0 && space.get(proj.i, proj.j - 1) > 0) {
-                    vel[1] += 1 / (double) (space.get(proj.i, proj.j - 1));
+                    vel[1] += 1 / (double) (walkNum-space.get(proj.i, proj.j - 1));
                 }
             }
             // apply nonNewtCorrection formula
