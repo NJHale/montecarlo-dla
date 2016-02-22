@@ -4,9 +4,6 @@ import edu.njit.math450.matrix.AdjMatrix;
 
 import java.util.Random;
 
-/**
- * Created by nhale on 11/5/2015.
- */
 public class RadialWalker extends Walker {
 
     //Maximum radius away from the seed that the aggregate has reached
@@ -54,16 +51,16 @@ public class RadialWalker extends Walker {
 
     /**
      * Overloaded Constructor for non-newtonian Radial Walker!
-     * @param oriSeed
-     * @param walkSeed
-     * @param radius
-     * @param buffer
-     * @param A
-     * @param B
-     * @param C
-     * @param L
-     * @param Cnn
-     * @param alpha
+     * @param oriSeed Random seed for reoriginating the walker
+     * @param walkSeed Random seed for choosing walk direction
+     * @param radius Initial radius to originate on
+     * @param buffer Size of buffer for increasing radius
+     * @param A Sticking probability parameter
+     * @param B Sticking probability parameter
+     * @param C Sticking probability parameter
+     * @param L Sticking probability parameter
+     * @param Cnn Sticking probability parameter
+     * @param alpha Sticking probability parameter
      */
     public RadialWalker(long oriSeed, long walkSeed, int radius, int buffer,
                         double A, double B, double C, double L, double Cnn, double alpha) {
@@ -280,26 +277,32 @@ public class RadialWalker extends Walker {
 //            }
 //            prob *= Math.pow(walkNum, .5) / (walkNum - maxWalkNum);
 
-
-
-//            // check opposite location from each adjacent neighbor
-//            // scan the block for neighbors starting at top left
-//            for (int i = (proj.i - 1); i <= proj.i + 1 && i < space.size(); i++) {
-//                for (int j = (proj.j - 1); j <= proj.j + 1 && j < space.size(); j++) {
-//                    // check if we have found a marked locale within the space
-//                    if (i >= 0 && j >= 0 && space.get(i, j) > 0) {
-////                        // check that the locale opposite from our current location within the locale is filled
-////                        if(2*proj.i-i>=0 && 2*proj.j-j>=0 && space.get(2*proj.i-i,2*proj.j-j)>0) {
-////                            // find difference between the walk numbers
-////                        }
-//
-//                        // adjust velocity based on adjacent neighbor
-//                        vel[0]+=(proj.i-i)/(double)(walkNum-space.get(i, j));
-//                        vel[1]+=(proj.j-j)/(double)(walkNum-space.get(i, j));
-//                    }
-//                }
-//            }
-            System.out.println("Newtonian Stick Prob: " + prob);
+            double[] vel = new double[2]; // stores velocity as components x,y
+            // check that walker has one on left, but not on right(or vice versa)
+            if((space.get(proj.i-1,proj.j)>0)!=(space.get(proj.i+1,proj.j)>0)) {
+                // find stuck walker on the left
+                if (proj.i - 1 > 0 && space.get(proj.i - 1, proj.j) > 0) {
+                    vel[0] += 1 / (double) (space.get(proj.i - 1, proj.j));
+                }
+                // find stuck walker on the right
+                if (proj.i + 1 > 0 && space.get(proj.i + 1, proj.j) > 0) {
+                    vel[0] -= 1 / (double) (space.get(proj.i + 1, proj.j));
+                }
+            }
+            // check that walker has one on top, but not on bottom(or vice versa)
+            if((space.get(proj.i,proj.j-1)>0)!=(space.get(proj.i,proj.j+1)>0)) {
+                // find stuck walker on the top
+                if (proj.j + 1 > 0 && space.get(proj.i, proj.j + 1) > 0) {
+                    vel[1] -= 1 / (double) (space.get(proj.i, proj.j + 1));
+                }
+                // walker stuck to the left
+                if (proj.j - 1 > 0 && space.get(proj.i, proj.j - 1) > 0) {
+                    vel[1] += 1 / (double) (space.get(proj.i, proj.j - 1));
+                }
+            }
+            // apply nonNewtCorrection formula
+            nonNewtCorrection=getNonNewtCorrection(vel);
+            //System.out.println("Newtonian Stick Prob: " + prob);
             prob+=nonNewtCorrection;
         }
         // catch negative probs?
@@ -307,6 +310,16 @@ public class RadialWalker extends Walker {
             prob = C;
         }
         return prob;
+    }
+
+    /**
+     *
+     * @param vel The velocity at the point
+     * @return the non Newtonian probability adjustment
+     */
+    public double getNonNewtCorrection(double[] vel) {
+        // take the squared velocity to half the power
+        return this.Cnn*Math.pow(vel[0]*vel[0]+vel[1]*vel[1],this.alpha/2.0);
     }
 
     /**

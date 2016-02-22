@@ -11,9 +11,6 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.PrintWriter;
 
-/**
- * Created by nhale on 11/5/2015.
- */
 public class DLASimulation {
 
     protected AdjMatrix space;
@@ -79,8 +76,8 @@ public class DLASimulation {
                 if (i % filter == 0) {
                     // calculate the average velocity over the whole boundary
                     // this is resource intensive, don't do this in the final simulation
-                    double[] averageVel2=new double[2];
-                    int[] numVel2Measured=new int[2];
+                    //double[] averageVel2=new double[2];
+                    //int[] numVel2Measured=new int[2];
                     double averageSpd=0;
                     int numSpdMeasured=0;
 
@@ -104,8 +101,8 @@ public class DLASimulation {
                                 }
 
                                 if(vel[0]!=0 || vel[1]!=0) {
-                                    averageVel2[0] = (averageVel2[0] * numVel2Measured[0] + vel[0] * vel[0]) / (++numVel2Measured[0]);
-                                    averageVel2[1] = (averageVel2[1] * numVel2Measured[1] + vel[1] * vel[1]) / (++numVel2Measured[1]);
+                                    //averageVel2[0] = (averageVel2[0] * numVel2Measured[0] + vel[0] * vel[0]) / (++numVel2Measured[0]);
+                                    //averageVel2[1] = (averageVel2[1] * numVel2Measured[1] + vel[1] * vel[1]) / (++numVel2Measured[1]);
                                     averageSpd = (averageSpd + Math.pow(vel[0]*vel[0]+vel[1]*vel[1],0.5)) / (++numSpdMeasured);
                                 }
                             }
@@ -122,13 +119,13 @@ public class DLASimulation {
                     //set the scaling factor
                     int scale = 1;
                     //render the space on a JFrame
-//                    JPanel dlaPanel = new DLAPanel(dlaImg, scale);
-//                    frame.setSize(space.size()*scale, space.size()*scale);
-//                    frame.setContentPane(dlaPanel);
-//                    //make the frame's content visible
-//                    frame.setVisible(true);
-//                    //set the default close op
-//                    frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+                    JPanel dlaPanel = new DLAPanel(dlaImg, scale);
+                    frame.setSize(space.size()*scale, space.size()*scale);
+                    frame.setContentPane(dlaPanel);
+                    //make the frame's content visible
+                    frame.setVisible(true);
+                    //set the default close op
+                    frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
                     //attempt write the image to a file
                     try {
                         File out = new File("images/dla-Size" + space.size() + "-Seed" + walker.getWalkSeed() +
