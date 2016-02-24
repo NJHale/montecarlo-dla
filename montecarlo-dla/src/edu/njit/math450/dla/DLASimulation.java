@@ -168,6 +168,6 @@ public class DLASimulation {
                 }
             }
         }
-        System.out.printf("%.8f \t %d  \t %d\n",averageSpd,numSpdMeasured,walkNum);
+        System.out.printf("%.9f \t %d  \t %d\n",averageSpd,numSpdMeasured,walkNum);
     }
 }

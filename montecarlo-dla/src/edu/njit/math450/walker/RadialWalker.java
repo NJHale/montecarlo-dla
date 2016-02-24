@@ -20,13 +20,6 @@ public class RadialWalker extends Walker {
     // non-newtonian sticking probabilities
     protected double Cnn, alpha;
 
-
-//    // track the average squared velocity
-//    protected double[] averageVel2=new double[2];
-//    // number of speeds averaged so far
-//    protected int[] numVel2Measured =new int[2];
-
-
     /**
      * Parameterized constructor creates a walker that walks from a radial
      * boundary held closely off the max radius of the aggregate
@@ -37,7 +30,7 @@ public class RadialWalker extends Walker {
     public RadialWalker(long oriSeed, long walkSeed, int radius, int buffer,
                         double A, double B, double C, double L) {
         super(walkSeed);
-        // initialize stick probs
+        // initialize parameters
         this.A = A;
         this.B = B;
         this.C = C;
@@ -64,7 +57,7 @@ public class RadialWalker extends Walker {
     public RadialWalker(long oriSeed, long walkSeed, int radius, int buffer,
                         double A, double B, double C, double L, double Cnn, double alpha) {
         super(walkSeed);
-        // initialize stick probs
+        // initialize parameters
         this.A = A;
         this.B = B;
         this.C = C;
@@ -97,15 +90,11 @@ public class RadialWalker extends Walker {
         //apply the step
         proj.i = locale.i + (int) Math.pow(-1, shift) * (1 - axis);
         proj.j = locale.j + (int) Math.pow(-1, shift) * axis;
-        //System.out.println("Raw attempted : " + proj.i + " : " + proj.j);
         int center = space.size() / 2; // integer division
         //calculate and truncate distance from the seed (euclidean norm)
         int r = (int) distance(proj.j, proj.i, center, center);
-        //System.out.println("r: " + r);
         //check if the walker has crossed the radial boundary
         int bound = radius + buffer;
-        //System.out.println("bound: " + bound);
-        //System.out.println("Raw attempted : " + proj.i + " : " + proj.j);
         if (r > bound || space.get(proj.i, proj.j) > 0) {
             //reset locale
             proj.i = locale.i;//set y
@@ -145,7 +134,6 @@ public class RadialWalker extends Walker {
                 while (true) {
                     proj = settle(proj, space);
                     if (proj.i == oldProj.i && proj.j == oldProj.j) {
-                        //System.out.println("We've found a consecutive settlement!");
                         break;
                     }
                     oldProj = new Locale(proj);
@@ -154,10 +142,8 @@ public class RadialWalker extends Walker {
                 if (makesHole(proj, space)) {
                     reOriginate(space.size());
                     // don't stick
-                    //System.out.println("Continued!!!");
                     continue;
                 }
-                //System.out.println("MADE IT PAST HOLE PREVENT!!!");
 
                 space.set(proj.i, proj.j, walkNum);
                 //calculate and truncate distance from the seed (euclidean norm)
@@ -278,24 +264,26 @@ public class RadialWalker extends Walker {
 
             double[] vel = new double[2]; // stores velocity as components x,y
             // check that walker has one on left, but not on right(or vice versa)
-            if((space.get(proj.i-1,proj.j)>0)!=(space.get(proj.i+1,proj.j)>0)) {
+            if(proj.i-1>0 && proj.i+1<(space.size()) &&
+                    ((space.get(proj.i-1,proj.j)>0)!=(space.get(proj.i+1,proj.j)>0))) {
                 // find stuck walker on the left
-                if (proj.i - 1 > 0 && space.get(proj.i - 1, proj.j) > 0) {
+                if (space.get(proj.i-1, proj.j) > 0) {
                     vel[0] += 1 / (double) (walkNum-space.get(proj.i - 1, proj.j));
                 }
                 // find stuck walker on the right
-                if (proj.i + 1 > 0 && space.get(proj.i + 1, proj.j) > 0) {
+                if (space.get(proj.i+1, proj.j) > 0) {
                     vel[0] -= 1 / (double) (walkNum-space.get(proj.i + 1, proj.j));
                 }
             }
             // check that walker has one on top, but not on bottom(or vice versa)
-            if((space.get(proj.i,proj.j-1)>0)!=(space.get(proj.i,proj.j+1)>0)) {
+            if(proj.j-1>0 && proj.j+1<space.size()-1 &&
+                    ((space.get(proj.i,proj.j-1)>0)!=(space.get(proj.i,proj.j+1)>0))) {
                 // find stuck walker on the top
-                if (proj.j + 1 > 0 && space.get(proj.i, proj.j + 1) > 0) {
+                if (space.get(proj.i, proj.j + 1) > 0) {
                     vel[1] -= 1 / (double) (walkNum-space.get(proj.i, proj.j + 1));
                 }
                 // walker stuck to the left
-                if (proj.j - 1 > 0 && space.get(proj.i, proj.j - 1) > 0) {
+                if (space.get(proj.i, proj.j - 1) > 0) {
                     vel[1] += 1 / (double) (walkNum-space.get(proj.i, proj.j - 1));
                 }
             }
