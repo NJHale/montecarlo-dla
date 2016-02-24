@@ -20,7 +20,6 @@ public class RadialWalker extends Walker {
     // non-newtonian sticking probabilities
     protected double Cnn, alpha;
 
-    protected Boolean nonNewtFlag;
 
 //    // track the average squared velocity
 //    protected double[] averageVel2=new double[2];
@@ -348,5 +347,6 @@ public class RadialWalker extends Walker {
     public double getB() {
         return B;
     }
+
 
 }

@@ -9,6 +9,9 @@ import edu.njit.math450.matrix.*;
  */
 public abstract class Walker {
 
+
+    protected Boolean nonNewtFlag;
+
     protected static int[] deltaRow = {0, -1, -1, -1, 0, 1, 1, 1};
     protected static int[] deltaCol = {1, 1, 0, -1, -1, -1, 0, 1};
 
@@ -186,6 +189,10 @@ public abstract class Walker {
      */
     public long getBuffer() {
         return buffer;
+    }
+
+    public boolean getNonNewtFlag() {
+        return nonNewtFlag;
     }
 
 }

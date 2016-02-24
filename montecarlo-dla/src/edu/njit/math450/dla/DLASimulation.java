@@ -10,6 +10,8 @@ import javax.swing.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.PrintWriter;
+import java.nio.file.Files;
+import java.nio.file.Path;
 
 public class DLASimulation {
 
@@ -72,6 +74,15 @@ public class DLASimulation {
             //PrintWriter writer = new PrintWriter(out, "UTF-8");
             int filter = 1000;
             System.out.println("Calculating fractal dimension every " + filter + " walks\n");
+
+            // attempt to create image directory structure
+            String dirPath = "images/DLA_";
+            dirPath += (walker.getNonNewtFlag()) ? "nonNewt" : "newt";
+            dirPath += "_Size" + space.size() + "_Seed" + walker.getWalkSeed() +
+                "_A" + ((RadialWalker)walker).getA() + "_B" + ((RadialWalker)walker).getB();
+            File dir = new File(dirPath);
+            boolean success = dir.mkdir() || dir.isDirectory();
+
             for (int i = 0; i < num_walks; i++) {
                 walker.walk(space);
                 if (i % filter == 0) {
@@ -96,10 +107,10 @@ public class DLASimulation {
                     frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
                     //attempt write the image to a file
                     try {
-                        File out = new File("images/dla-Size" + space.size() + "-Seed" + walker.getWalkSeed() +
-                                "-A" + ((RadialWalker)walker).getA() + "-B" + ((RadialWalker)walker).getB()
-                                + "-" + i + ".png");
-                        ImageIO.write(dlaImg, "png", out);
+                        if (success) {
+                            File out = new File(dirPath + "/Walk" + i + ".png");
+                            ImageIO.write(dlaImg, "png", out);
+                        }
                     } catch (Exception e) {
                         System.err.println("An error occurred while attempting to store the " +
                                 "DLA in a png");

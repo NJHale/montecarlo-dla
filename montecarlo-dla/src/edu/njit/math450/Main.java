@@ -25,8 +25,10 @@ public class Main {
         double C = .01;
         double L = 9;
 	    //Attempt walker simulation
+//        Walker walker = new RadialWalker(oriSeed, walkSeed, 3,
+//                buffer, A, B, C, L);//, .85, .233);//new DumbWalker(walkSeed, stickSeed);
         Walker walker = new RadialWalker(oriSeed, walkSeed, 3,
-                buffer, A, B, C, L);//, .85, .233);//new DumbWalker(walkSeed, stickSeed);
+                buffer, A, B, C, L, .85, .233);//new DumbWalker(walkSeed, stickSeed);
         //Walker walker = new DumbWalker(walkSeed, walkSeed);
         //instantiate the walk space
         AdjMatrix space = new ArrayAdjMatrix(n);
