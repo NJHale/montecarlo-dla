@@ -58,11 +58,12 @@ public class DLASimulation {
 
     /**
      * Walks the walker walks times to generate the DLA
-     * @param walks number of walks to complete before simulation completion
+     * @param num_walks number of walks to complete before simulation completion
      */
-    public AdjMatrix simulate(int walks) {
-        //walk walks times to generate the DLA
+    public AdjMatrix simulate(int num_walks) {
+        //walk num_walks times to generate the DLA
 
+//        //Create the output file
 //        File out = new File("run-info/dla-" + space.size() +
 //                "-w" + walks + "-s" + walker.getWalkSeed() +
 //                "-b" + walker.getBuffer() + ".txt");
@@ -71,44 +72,11 @@ public class DLASimulation {
             //PrintWriter writer = new PrintWriter(out, "UTF-8");
             int filter = 1000;
             System.out.println("Calculating fractal dimension every " + filter + " walks\n");
-            for (int i = 0; i < walks; i++) {
+            for (int i = 0; i < num_walks; i++) {
                 walker.walk(space);
                 if (i % filter == 0) {
-                    // calculate the average velocity over the whole boundary
-                    // this is resource intensive, don't do this in the final simulation
-                    //double[] averageVel2=new double[2];
-                    //int[] numVel2Measured=new int[2];
-                    double averageSpd=0;
-                    int numSpdMeasured=0;
-
-                    for(int i1=0;i1<space.size();i1++) {
-                        for(int j1=0;j1<space.size();j1++) {
-                            if(space.get(i1,j1)>0) {
-                                double age = (i + 3) - space.get(i1,j1); // implied cast to double
-                                double[] vel = new double[2]; // stores velocity as components x,y
-                                // check left and right
-                                // if one is occupied and the other isn't
-                                if(space.get(i1-1,j1)>0 && !(space.get(i1+1,j1)>0)) {
-                                    vel[0]=1/age;
-                                } else if (space.get(i1+1,j1)>0 && !(space.get(i1-1,j1)>0)) {
-                                    vel[0]=-1/age;
-                                }
-                                // check top and bottom
-                                if(space.get(i1,j1-1)>0 && !(space.get(i1,j1+1)>0)) {
-                                    vel[1]=1/age;
-                                } else if (space.get(i1,j1+1)>0 && !(space.get(i1,j1-1)>0)) {
-                                    vel[1]=-1/age;
-                                }
-
-                                if(vel[0]!=0 || vel[1]!=0) {
-                                    //averageVel2[0] = (averageVel2[0] * numVel2Measured[0] + vel[0] * vel[0]) / (++numVel2Measured[0]);
-                                    //averageVel2[1] = (averageVel2[1] * numVel2Measured[1] + vel[1] * vel[1]) / (++numVel2Measured[1]);
-                                    averageSpd = (averageSpd + Math.pow(vel[0]*vel[0]+vel[1]*vel[1],0.5)) / (++numSpdMeasured);
-                                }
-                            }
-                        }
-                    }
-                    System.out.println(averageSpd+" "+numSpdMeasured+" "+i);
+                    // calculate and print out the average speed over the boundary
+                    calcAvgSpd(i);
 
 
                     //double fDim = DLAUtil.fractalDim(space);
@@ -158,4 +126,37 @@ public class DLASimulation {
         return complete;
     }
 
+    public void calcAvgSpd(int walkNum) {
+        // calculate the average speed over the whole boundary
+        // this is resource intensive, don't do this in the final simulation
+        double averageSpd=0;
+        int numSpdMeasured=0;
+
+        for(int i1=0;i1<space.size();i1++) {
+            for(int j1=0;j1<space.size();j1++) {
+                if(space.get(i1,j1)>0) {
+                    double age = (walkNum + 3) - space.get(i1,j1); // implied cast to double
+                    double[] vel = new double[2]; // stores velocity as components x,y
+                    // check left and right
+                    // if one is occupied and the other isn't
+                    if(space.get(i1-1,j1)>0 && !(space.get(i1+1,j1)>0)) {
+                        vel[0]=1/age;
+                    } else if (space.get(i1+1,j1)>0 && !(space.get(i1-1,j1)>0)) {
+                        vel[0]=-1/age;
+                    }
+                    // check top and bottom
+                    if(space.get(i1,j1-1)>0 && !(space.get(i1,j1+1)>0)) {
+                        vel[1]=1/age;
+                    } else if (space.get(i1,j1+1)>0 && !(space.get(i1,j1-1)>0)) {
+                        vel[1]=-1/age;
+                    }
+
+                    if(vel[0]!=0 || vel[1]!=0) {
+                        averageSpd = (averageSpd + Math.pow(vel[0]*vel[0]+vel[1]*vel[1],0.5)) / (++numSpdMeasured);
+                    }
+                }
+            }
+        }
+        System.out.printf("%.8f \t %d  \t %d\n",averageSpd,numSpdMeasured,walkNum);
+    }
 }
