@@ -10,36 +10,70 @@ import javax.swing.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 
+
 public class Main {
 
     public static void main(String[] args) {
-        System.out.println("Starting Simulation!");
-        //hard code initial values for now
-        long walkSeed = 233;//8009832;
-        long oriSeed = 332;//9008932;
-        int n = 1000;
-        int walks = 100000;
-        int buffer = 3;
-        double A = 2;
-        double B = 0.15;
-        double C = .01;
-        int L = 9;
+        System.out.println("Parsing cmd line arguments");
+        long walkSeed = 0;
+        long oriSeed = 0;//8009832;
+        int spaceSize = 0;
+        int walks = 0;
+        int buffer = 0;
+        int L = 0;
+        double A = 0;
+        double B = 0;
+        double C = 0;
+        double Cnn = 0;
+        double alpha = 0;
+        boolean nonNewtFlag = false;
 
-        // .85,.233
-        // 10,.5; 1,.5
-        double Cnn=.85;
-        double alpha=.233;
 
-        boolean displayOn=false;
+        int idx = 0;
 
+        try {
+            // fill variables
+            walkSeed = Long.parseLong(args[idx++]);//8009832;
+            oriSeed = Long.parseLong(args[idx++]);//9008932;
+            spaceSize = Integer.parseInt(args[idx++]);
+            walks = Integer.parseInt(args[idx++]);
+            buffer = Integer.parseInt(args[idx++]);
+            A = Double.parseDouble(args[idx++]);
+            B = Double.parseDouble(args[idx++]);
+            C = Double.parseDouble(args[idx++]);
+            L = Integer.parseInt(args[idx++]);
+            // check for non-newtonian goodness
+            if (args.length > idx) {
+                Cnn = Double.parseDouble(args[idx++]);
+                alpha = Double.parseDouble(args[idx++]);
+                nonNewtFlag = true;
+            }
+        } catch (Exception e) {
+            System.err.println("cmd line arguments invalid or missing");
+            System.err.println("Expected Format:\n walkSeed oriSeed spaceSize walks buffer A B C L [Cnn alpha]");
+            System.exit(1);
+        }
+
+        boolean displayOn = false;
+
+        Walker walker;
+
+        // check whether we are attempting a newtonian or non-newtonian
+
+        if (nonNewtFlag) {
+            walker = new RadialWalker(oriSeed, walkSeed, 3,
+                    buffer, A, B, C, L, Cnn, alpha);
+        } else {
+            walker = new RadialWalker(oriSeed, walkSeed, 3,
+                    buffer, A, B, C, L);
+        }
 	    //Attempt walker simulation
-        Walker walker = new RadialWalker(oriSeed, walkSeed, 3,
-                buffer, A, B, C, L, Cnn, alpha);
+
 //        Walker walker = new RadialWalker(oriSeed, walkSeed, 3,
 //                buffer, A, B, C, L, .85, .233);
         //Walker walker = new DumbWalker(walkSeed, walkSeed);
         //instantiate the walk space
-        AdjMatrix space = new ArrayAdjMatrix(n);
+        AdjMatrix space = new ArrayAdjMatrix(spaceSize);
         //create the simulation
         DLASimulation dla = new DLASimulation(space, walker);
         long start = System.currentTimeMillis();
@@ -51,7 +85,7 @@ public class Main {
         BufferedImage dlaImg = space.rasterize(hue);
         //attempt write the image to a file
         try {
-            File out = new File("images/dla-" + n +
+            File out = new File("images/dla-" + spaceSize +
                     "-" + walks + "-" + walkSeed + ".png");
             ImageIO.write(dlaImg, "png", out);
         } catch (Exception e) {
@@ -64,7 +98,7 @@ public class Main {
             int scale = 1;
             //render the space on a JFrame
             JPanel dlaPanel = new DLAPanel(dlaImg, scale);
-            frame.setSize(n * scale, n * scale);
+            frame.setSize(spaceSize * scale, spaceSize * scale);
             frame.setContentPane(dlaPanel);
             //make the frame's content visible
             frame.setVisible(true);
