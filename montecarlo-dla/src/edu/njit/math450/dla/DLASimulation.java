@@ -62,7 +62,7 @@ public class DLASimulation {
      * Walks the walker walks times to generate the DLA
      * @param num_walks number of walks to complete before simulation completion
      */
-    public AdjMatrix simulate(int num_walks) {
+    public AdjMatrix simulate(int num_walks, boolean displayOn) {
         //walk num_walks times to generate the DLA
 
 //        //Create the output file
@@ -87,24 +87,26 @@ public class DLASimulation {
                 walker.walk(space);
                 if (i % filter == 0) {
                     // calculate and print out the average speed over the boundary
-                    calcAvgSpd(i);
+                    //calcAvgSpd(i);
 
 
-                    //double fDim = DLAUtil.fractalDim(space);
-                    //System.out.println("Walks : " + i + " fractal dimension : " + fDim);
+                    double fDim = DLAUtil.fractalDim(space);
+                    System.out.println("Walks : " + i + " fractal dimension : " + fDim);
                     //writer.write("Walks : " + i + " fractal dimension : " + fDim + "\n");
                     //writer.flush();
                     BufferedImage dlaImg = space.rasterize(100);
                     //set the scaling factor
                     int scale = 1;
-                    //render the space on a JFrame
-                    JPanel dlaPanel = new DLAPanel(dlaImg, scale);
-                    frame.setSize(space.size()*scale, space.size()*scale);
-                    frame.setContentPane(dlaPanel);
-                    //make the frame's content visible
-                    frame.setVisible(true);
-                    //set the default close op
-                    frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+                    if(displayOn) {
+                        //render the space on a JFrame
+                        JPanel dlaPanel = new DLAPanel(dlaImg, scale);
+                        frame.setSize(space.size() * scale, space.size() * scale);
+                        frame.setContentPane(dlaPanel);
+                        //make the frame's content visible
+                        frame.setVisible(true);
+                        //set the default close op
+                        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+                    }
                     //attempt write the image to a file
                     try {
                         if (success) {

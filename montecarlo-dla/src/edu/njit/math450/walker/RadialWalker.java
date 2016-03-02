@@ -15,7 +15,8 @@ public class RadialWalker extends Walker {
     protected int walkNum = 1;
 
     // sticking probabilities
-    protected double A, B, C, L;
+    protected double A, B, C;
+    protected int L;
 
     // non-newtonian sticking probabilities
     protected double Cnn, alpha;
@@ -28,7 +29,7 @@ public class RadialWalker extends Walker {
      * @param buffer Distance from the max radius to place the radial boundary
      */
     public RadialWalker(long oriSeed, long walkSeed, int radius, int buffer,
-                        double A, double B, double C, double L) {
+                        double A, double B, double C, int L) {
         super(walkSeed);
         // initialize parameters
         this.A = A;
@@ -49,13 +50,13 @@ public class RadialWalker extends Walker {
      * @param buffer Size of buffer for increasing radius
      * @param A Sticking probability parameter
      * @param B Sticking probability parameter
-     * @param C Sticking probability parameter
-     * @param L Sticking probability parameter
-     * @param Cnn Sticking probability parameter
-     * @param alpha Sticking probability parameter
+     * @param C Minimum probability of sticking
+     * @param L Size of box for curvature calculation
+     * @param Cnn Constant coefficient of velocity in sticking probability calculation
+     * @param alpha Power of velocity in sticking probability calculation
      */
     public RadialWalker(long oriSeed, long walkSeed, int radius, int buffer,
-                        double A, double B, double C, double L, double Cnn, double alpha) {
+                        double A, double B, double C, int L, double Cnn, double alpha) {
         super(walkSeed);
         // initialize parameters
         this.A = A;
@@ -240,10 +241,10 @@ public class RadialWalker extends Walker {
      */
     private double stickProb(Locale proj, AdjMatrix space) {
         // calculate number of neigs in a 9x9
-        int neig = 4;
+        int neig = L/2;
         int numNeig = numNeig(neig, proj, space);
 
-        double prob = A * (numNeig / L / L - (L - 1) / (2 * L)) + B;
+        double prob = A * ((double)numNeig / L / L - (double)(L - 1) / (2 * L)) + B;
 
         if (nonNewtFlag) {
             double nonNewtCorrection=0;
@@ -289,6 +290,7 @@ public class RadialWalker extends Walker {
             }
             // apply nonNewtCorrection formula
             nonNewtCorrection=getNonNewtCorrection(vel);
+            //System.out.println("Non Newtonian Correction: "+nonNewtCorrection);
             //System.out.println("Newtonian Stick Prob: " + prob);
             prob+=nonNewtCorrection;
         }

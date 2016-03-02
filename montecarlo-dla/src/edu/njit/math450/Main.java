@@ -21,21 +21,29 @@ public class Main {
         int walks = 100000;
         int buffer = 3;
         double A = 2;
-        double B = .15;
+        double B = 0.15;
         double C = .01;
-        double L = 9;
+        int L = 9;
+
+        // .85,.233
+        // 10,.5; 1,.5
+        double Cnn=.85;
+        double alpha=.233;
+
+        boolean displayOn=false;
+
 	    //Attempt walker simulation
         Walker walker = new RadialWalker(oriSeed, walkSeed, 3,
-                buffer, A, B, C, L, .85, .233);//new DumbWalker(walkSeed, stickSeed);
+                buffer, A, B, C, L, Cnn, alpha);
 //        Walker walker = new RadialWalker(oriSeed, walkSeed, 3,
-//                buffer, A, B, C, L, .85, .233);//new DumbWalker(walkSeed, stickSeed);
+//                buffer, A, B, C, L, .85, .233);
         //Walker walker = new DumbWalker(walkSeed, walkSeed);
         //instantiate the walk space
         AdjMatrix space = new ArrayAdjMatrix(n);
         //create the simulation
         DLASimulation dla = new DLASimulation(space, walker);
         long start = System.currentTimeMillis();
-        space = dla.simulate(walks);
+        space = dla.simulate(walks, displayOn);
         System.out.println(walks + " random walks completed in " +
                 (System.currentTimeMillis() - start) + " ms");
         //rasterize the dla and store the image
@@ -50,17 +58,18 @@ public class Main {
             System.err.println("An error occurred while attempting to store the " +
                     "DLA in a png");
         }
-
-        JFrame frame = new JFrame("DLA");
-        //set the scaling factor
-        int scale = 1;
-        //render the space on a JFrame
-        JPanel dlaPanel = new DLAPanel(dlaImg, scale);
-        frame.setSize(n*scale, n*scale);
-        frame.setContentPane(dlaPanel);
-        //make the frame's content visible
-        frame.setVisible(true);
-        //set the default close op
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        if(displayOn) {
+            JFrame frame = new JFrame("DLA");
+            //set the scaling factor
+            int scale = 1;
+            //render the space on a JFrame
+            JPanel dlaPanel = new DLAPanel(dlaImg, scale);
+            frame.setSize(n * scale, n * scale);
+            frame.setContentPane(dlaPanel);
+            //make the frame's content visible
+            frame.setVisible(true);
+            //set the default close op
+            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        }
     }
 }
