@@ -3,17 +3,16 @@ package edu.njit.math450.matrix;
 /**
  * Created by nhale on 11/5/2015.
  */
-public class ArrayAdjMatrix extends AdjMatrix {
+public class ArraySpace extends Space {
 
     private int[][] matrix;
 
     /**
      * Parameterized constructor instantiates
      * the m x n Adjacency Matrix as an array of arrays filled with zeros.
-     * @param m
      * @param n
      */
-    public ArrayAdjMatrix(int n) {
+    public ArraySpace(int n) {
         matrix = new int[n][n];
         for(int i = 0; i < n; i++) {
             for(int j = 0; j < n; j++) {

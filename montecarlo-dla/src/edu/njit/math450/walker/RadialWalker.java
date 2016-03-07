@@ -1,6 +1,6 @@
 package edu.njit.math450.walker;
 
-import edu.njit.math450.matrix.AdjMatrix;
+import edu.njit.math450.matrix.Space;
 
 import java.util.Random;
 
@@ -80,7 +80,7 @@ public class RadialWalker extends Walker {
      * @return next projected Locale based on a random seed
      */
     @Override
-    protected Locale step(AdjMatrix space) {
+    protected Locale step(Space space) {
         //System.out.println("step...");
         //decide axis of movement
         //0 -> vertical, 1 -> horizontal
@@ -113,7 +113,7 @@ public class RadialWalker extends Walker {
      *              topography of the space being walked on
      */
     @Override
-    public void walk(AdjMatrix space) {
+    public void walk(Space space) {
         // increment the walk number
         walkNum++;
         //System.out.println("WalkNum: " + walkNum);
@@ -170,7 +170,7 @@ public class RadialWalker extends Walker {
      *              topography of the space being walked on
      * @return the locale that the walker should settle into
      */
-    protected Locale settle(Locale proj, AdjMatrix space) {
+    protected Locale settle(Locale proj, Space space) {
         // instantiate the maximum neighbored open locale
         int maxNeig = 0;
         Locale settlement = new Locale(proj.i,proj.j);
@@ -215,7 +215,7 @@ public class RadialWalker extends Walker {
      * @return true if the walker will stick to the projected locale
      */
     @Override
-    protected Boolean willStick(Locale proj, AdjMatrix space) {
+    protected Boolean willStick(Locale proj, Space space) {
         //check immediate area around the projected locale
         int up = proj.i - 1;
         int down = proj.i + 1;
@@ -239,7 +239,7 @@ public class RadialWalker extends Walker {
      *              topography of the space being walked on
      * @return the probability of sticking at the projected locale
      */
-    private double stickProb(Locale proj, AdjMatrix space) {
+    private double stickProb(Locale proj, Space space) {
         // calculate number of neigs in a 9x9
         int neig = L/2;
         int numNeig = numNeig(neig, proj, space);

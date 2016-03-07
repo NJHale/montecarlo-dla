@@ -1,7 +1,5 @@
 package edu.njit.math450.dla;
 
-import edu.njit.math450.matrix.AdjMatrix;
-
 import javax.swing.JPanel;
 
 import java.awt.*;

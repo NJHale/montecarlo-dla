@@ -54,6 +54,9 @@ public class Main {
             System.exit(1);
         }
 
+        // recalibrate spaceSize to a power of 2
+        spaceSize = (int) Math.pow(2, (int)(Math.log(spaceSize - 1) / Math.log(2)) + 1);
+
         boolean displayOn = false;
 
         Walker walker;
@@ -73,11 +76,11 @@ public class Main {
 //                buffer, A, B, C, L, .85, .233);
         //Walker walker = new DumbWalker(walkSeed, walkSeed);
         //instantiate the walk space
-        AdjMatrix space = new ArrayAdjMatrix(spaceSize);
+        Space space = new ArraySpace(spaceSize);
         //create the simulation
-        DLASimulation dla = new DLASimulation(space, walker);
+        DLASimulation dla = new DLASimulation(space, walker, displayOn);
         long start = System.currentTimeMillis();
-        space = dla.simulate(walks, displayOn);
+        space = dla.simulate(walks);
         System.out.println(walks + " random walks completed in " +
                 (System.currentTimeMillis() - start) + " ms");
         //rasterize the dla and store the image

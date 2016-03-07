@@ -1,6 +1,6 @@
 package edu.njit.math450.dla;
 
-import edu.njit.math450.matrix.AdjMatrix;
+import edu.njit.math450.matrix.Space;
 import edu.njit.math450.util.DLAUtil;
 import edu.njit.math450.walker.RadialWalker;
 import edu.njit.math450.walker.Walker;
@@ -9,19 +9,18 @@ import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
-import java.io.PrintWriter;
-import java.nio.file.Files;
-import java.nio.file.Path;
 
 public class DLASimulation {
 
-    protected AdjMatrix space;
+    protected Space space;
 
     protected Walker walker;
 
     protected Boolean complete;
 
     private JFrame frame;
+
+    private boolean displayOn;
 
     /**
      * Parameterized constructor defines the default
@@ -32,7 +31,7 @@ public class DLASimulation {
      * @param walker Implementation of Walker that will build
      *               the DLA
      */
-    public DLASimulation(AdjMatrix space, Walker walker) {
+    public DLASimulation(Space space, Walker walker, boolean displayOn) {
         int n = space.size();
         //place the seed (should be around (1/2)*(n, n)th entry)
         int seed = n / 2; // integer division
@@ -51,10 +50,11 @@ public class DLASimulation {
             }
         }*/
         // initialize the JFrame for displaying the DLA
-        frame = new JFrame("Running DLA");
+        if (displayOn) frame = new JFrame("Running DLA");
         // set the space
         this.space = space;
         this.walker = walker;
+        this.displayOn = displayOn;
         complete = false;
     }
 
@@ -62,7 +62,7 @@ public class DLASimulation {
      * Walks the walker walks times to generate the DLA
      * @param num_walks number of walks to complete before simulation completion
      */
-    public AdjMatrix simulate(int num_walks, boolean displayOn) {
+    public Space simulate(int num_walks) {
         //walk num_walks times to generate the DLA
 
 //        //Create the output file

@@ -5,17 +5,17 @@ import java.awt.image.BufferedImage;
 /**
  * Created by nhale on 11/5/2015.
  */
-public abstract class AdjMatrix {
+public abstract class Space {
     /**
-     * Gets the value of the AdjMatrix at (i, j)
+     * Gets the value of the Space at (i, j)
      * @param i row
      * @param j column
-     * @return the value of the AdjMatrix at (i, j)
+     * @return the value of the Space at (i, j)
      */
     public abstract int get(int i, int j);
 
     /**
-     * Sets the value of the AdjMatrix at (i, j)
+     * Sets the value of the Space at (i, j)
      * @param i row
      * @param j column
      * @param v value to set as the (i, j)th entry
@@ -29,11 +29,11 @@ public abstract class AdjMatrix {
     public abstract int size();
 
     /**
-     * Rasterizes the AdjMatrix into a
+     * Rasterizes the Space into a
      * BufferedImage, pixel by pixel and
      * returns the resulting image
      * @param hue integer value of hue to rasterize matrix with
-     * @return Rasterization of the AdjMatrix
+     * @return Rasterization of the Space
      */
     public BufferedImage rasterize(int hue) {
         BufferedImage img = new BufferedImage(size(), size(), BufferedImage.TYPE_INT_RGB);

@@ -75,7 +75,7 @@ public abstract class Walker {
      * @return the next projected locale for the walker
      *              to occupy.
      */
-    protected abstract Locale step(AdjMatrix space);
+    protected abstract Locale step(Space space);
 
     /**
      * Walks until the walker sticks to the aggregate and
@@ -83,7 +83,7 @@ public abstract class Walker {
      * @param space Square Adjacency matrix that represents the
      *              topography of the space being walked on
      */
-    public abstract void walk(AdjMatrix space);
+    public abstract void walk(Space space);
 
     /**
      * Determines whether the walker will stick
@@ -94,7 +94,7 @@ public abstract class Walker {
      * @return true if the walker is to stick in the projected locale,
      *  false otherwise
      */
-    protected abstract Boolean willStick(Locale projected, AdjMatrix space);
+    protected abstract Boolean willStick(Locale projected, Space space);
 
     /**
      * Sets the Walker's locale to some origin position
@@ -136,7 +136,7 @@ public abstract class Walker {
      * @param proj Projected location (assumed empty)
      * @return Number of neighbors in the neighborhood of the projected locale
      */
-    protected int numNeig(int neig, Locale proj, AdjMatrix space) {
+    protected int numNeig(int neig, Locale proj, Space space) {
         int neighbors = 0;
         // scan the block for neighbors starting at top left
         for (int i = (proj.i - neig); i <= proj.i + neig && i < space.size(); i++) {
@@ -158,7 +158,7 @@ public abstract class Walker {
      * @param space adjacency matrix of the space
      * @return true if a walker at proj will form a hole; false otherwise
      */
-    protected Boolean makesHole(Locale proj, AdjMatrix space) {
+    protected Boolean makesHole(Locale proj, Space space) {
         // get the current state
         int curState = space.get(proj.i + 1, proj.j + 1);
         // initialize flip count

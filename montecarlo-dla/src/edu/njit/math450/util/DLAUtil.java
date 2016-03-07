@@ -1,6 +1,6 @@
 package edu.njit.math450.util;
 
-import edu.njit.math450.matrix.AdjMatrix;
+import edu.njit.math450.matrix.Space;
 
 import java.security.InvalidParameterException;
 import java.util.ArrayList;
@@ -14,16 +14,18 @@ import java.util.List;
 public class DLAUtil {
 
     /**
-     * Calculates the fractal dimension of AdjMatrix A
+     * Calculates the fractal dimension of Space A
      * @param A Adjacency Matrix representing the fractal
-     * @return The fractal dimension of AdjMatrix A
+     * @return The fractal dimension of Space A
      */
-    public static double fractalDim(AdjMatrix A) {
+    public static double fractalDim(Space A) {
         //int boxes = (int) (Math.log(A.size()) / Math.log(2));
 
         List<Double> cnts = new ArrayList<>();
         List<Double> x = new ArrayList<>();
-        for (int i = A.size() / 2; i <= A.size(); i *= 2) {
+        int start = (int) Math.pow(2, Math.round(Math.log(A.size()) / Math.log(2)) / 2);
+        for (int i = start; i <= A.size(); i *= 2) {
+            // System.out.println("boxNumber: " + i);
             x.add(Math.log(i));
             cnts.add(Math.log(boxCount(A, i)));
         }
@@ -39,12 +41,12 @@ public class DLAUtil {
      * @param numBoxes Number of boxes to count
      * @return Number of boxes that contain values > 0
      */
-    private static int boxCount(AdjMatrix A, int numBoxes) {
-        int n = A.size();//get the size of n x n AdjMatrix A
+    private static int boxCount(Space A, int numBoxes) {
+        int n = A.size();//get the size of n x n Space A
         //instantiate the box count
         int count = 0;
         //calculate the scaled size of each box
-        int boxSize = (int) (n / numBoxes);
+        int boxSize = (n / numBoxes);
         for (int ibox = 0; ibox < numBoxes; ibox++) {//traverse each box
             int si = ibox * boxSize;//get the starting i
             for(int jbox = 0; jbox < numBoxes; jbox++) {

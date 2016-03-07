@@ -1,8 +1,6 @@
 package edu.njit.math450.walker;
 
-import edu.njit.math450.matrix.AdjMatrix;
-
-import java.util.Random;
+import edu.njit.math450.matrix.Space;
 
 /**
  * Created by nhale on 11/5/2015.
@@ -43,7 +41,7 @@ public class NestlingWalker extends Walker {
      * @return next projected Locale based on a random seed
      */
     @Override
-    protected Locale step(AdjMatrix space) {
+    protected Locale step(Space space) {
         //System.out.println("step...");
         //decide axis of movement
         //0 -> vertical, 1 -> horizontal
@@ -80,7 +78,7 @@ public class NestlingWalker extends Walker {
      *              topography of the space being walked on
      */
     @Override
-    public void walk(AdjMatrix space) {
+    public void walk(Space space) {
         //System.out.println("boundary: " + radius + buffer);
         //relocate the walker to a boundary
         reOriginate(space.size());
@@ -125,7 +123,7 @@ public class NestlingWalker extends Walker {
      * @return true if the walker will stick to the projected locale
      */
     @Override
-    protected Boolean willStick(Locale proj, AdjMatrix space) {
+    protected Boolean willStick(Locale proj, Space space) {
         //check immediate area around the projected locale
         int up = proj.i - 1;
         int down = proj.i + 1;
