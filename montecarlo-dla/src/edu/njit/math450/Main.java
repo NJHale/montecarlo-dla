@@ -57,7 +57,7 @@ public class Main {
         // recalibrate spaceSize to a power of 2
         spaceSize = (int) Math.pow(2, (int)(Math.log(spaceSize - 1) / Math.log(2)) + 1);
 
-        boolean displayOn = false;
+        boolean displayOn = true;
 
         Walker walker;
 

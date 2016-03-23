@@ -83,15 +83,17 @@ public class DLASimulation {
             File dir = new File(dirPath);
             boolean success = dir.mkdir() || dir.isDirectory();
 
+            System.out.println("Walk #, Fractal Dimension, Average Speed");
+
             for (int i = 0; i < num_walks; i++) {
                 walker.walk(space);
                 if (i % filter == 0) {
                     // calculate and print out the average speed over the boundary
-                    //calcAvgSpd(i);
+                    calcAvgSpd(i);
 
 
                     double fDim = DLAUtil.fractalDim(space);
-                    System.out.println("Walks : " + i + " fractal dimension : " + fDim);
+                    System.out.println(i + "," + fDim + "," + calcAvgSpd(i));
                     //writer.write("Walks : " + i + " fractal dimension : " + fDim + "\n");
                     //writer.flush();
                     BufferedImage dlaImg = space.rasterize(100);
@@ -139,7 +141,11 @@ public class DLASimulation {
         return complete;
     }
 
-    public void calcAvgSpd(int walkNum) {
+    /**
+     * Calculates the average speed of the aggregate at the given (current) walk number
+     * @param walkNum
+     */
+    public double calcAvgSpd(int walkNum) {
         // calculate the average speed over the whole boundary
         // this is resource intensive, don't do this in the final simulation
         double averageSpd=0;
@@ -170,6 +176,7 @@ public class DLASimulation {
                 }
             }
         }
-        System.out.printf("%.9f \t %d  \t %d\n",averageSpd,numSpdMeasured,walkNum);
+        return averageSpd;
+        //System.out.printf("%.9f \t %d  \t %d\n",averageSpd,numSpdMeasured,walkNum);
     }
 }

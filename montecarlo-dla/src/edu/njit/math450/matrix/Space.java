@@ -44,7 +44,7 @@ public abstract class Space {
                 int r = (int) Math.sqrt(Math.pow((size()/2 - i), 2) +
                         Math.pow((size()/2 - j), 2));
                 //calculate color palette based on value at (i, j)
-                int palette = (get(i, j) > 0) ? 0 : 0xffffff;//get(i, j);//r * get(i, j);//(int) ((Math.exp(r) + hue) % 16777215) * get(i, j);
+                int palette = (get(i, j) > 0) ? get(i, j) : 0xffffff;//get(i, j);//r * get(i, j);//(int) ((Math.exp(r) + hue) % 16777215) * get(i, j);
                 img.setRGB(i, j, palette);
             }
         }
