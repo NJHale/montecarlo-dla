@@ -1,5 +1,6 @@
 package edu.njit.math450.walker;
 
+import edu.njit.math450.matrix.Locale;
 import edu.njit.math450.matrix.Space;
 
 /**

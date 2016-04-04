@@ -55,7 +55,6 @@ public class Main {
         double alpha = 0;
         boolean nonNewtFlag = false;
 
-
         int idx = 0;
 
         try {

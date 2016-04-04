@@ -1,5 +1,6 @@
 package edu.njit.math450.walker;
 
+import edu.njit.math450.matrix.Locale;
 import edu.njit.math450.matrix.Space;
 
 import java.util.Random;
@@ -93,7 +94,7 @@ public class RadialWalker extends Walker {
         proj.j = locale.j + (int) Math.pow(-1, shift) * axis;
         int center = space.size() / 2; // integer division
         //calculate and truncate distance from the seed (euclidean norm)
-        int r = (int) distance(proj.j, proj.i, center, center);
+        int r = (int) Space.distance(proj.j, proj.i, center, center);
         //check if the walker has crossed the radial boundary
         int bound = radius + buffer;
         if (r > bound || space.get(proj.i, proj.j) > 0) {
@@ -140,7 +141,7 @@ public class RadialWalker extends Walker {
                     oldProj = new Locale(proj);
                 }
                 // check to see if we've formed a hole
-                if (makesHole(proj, space)) {
+                if (space.makesHole(proj)) {
                     reOriginate(space.size());
                     // don't stick
                     continue;
@@ -148,7 +149,7 @@ public class RadialWalker extends Walker {
 
                 space.set(proj.i, proj.j, walkNum);
                 //calculate and truncate distance from the seed (euclidean norm)
-                int r = (int) distance(proj.j, proj.i, space.size()/2, space.size()/2);
+                int r = (int) Space.distance(proj.j, proj.i, space.size()/2, space.size()/2);
                 //update the max radius of the aggregate if there is still room to expand
                 int bound = radius + buffer;
                     if ((bound < ((space.size() / 2) - 1) &&
@@ -187,7 +188,7 @@ public class RadialWalker extends Walker {
                     // we've found a possible settling location
                     prospect.setCoords(i,j);
                     // calculate the number of neighbors
-                    int numNeig = numNeig(1, prospect, space);
+                    int numNeig = space.numNeig(1, prospect);
                     if (numNeig > maxNeig) {
                         // clear the ties count
                         numTied = 1;
@@ -242,26 +243,12 @@ public class RadialWalker extends Walker {
     private double stickProb(Locale proj, Space space) {
         // calculate number of neigs in a 9x9
         int neig = L/2;
-        int numNeig = numNeig(neig, proj, space);
+        int numNeig = space.numNeig(neig, proj);
 
         double prob = A * ((double)numNeig / L / L - (double)(L - 1) / (2 * L)) + B;
 
         if (nonNewtFlag) {
             double nonNewtCorrection=0;
-//            int maxWalkNum = 0;
-//            // scan the block for neighbors starting at top left
-//            for (int i = (proj.i - 1); i <= proj.i + 1 && i < space.size(); i++) {
-//                for (int j = (proj.j - 1); j <= proj.j + 1 && j < space.size(); j++) {
-//                    // check if we have found a marked locale within the space
-//                    if (i >= 0 && j >= 0 && space.get(i, j) > 0) {
-//                        // get the max walk num
-//                        if (space.get(i, j) > maxWalkNum) {
-//                            maxWalkNum = space.get(i, j);
-//                        }
-//                    }
-//                }
-//            }
-//            prob *= Math.pow(walkNum, .5) / (walkNum - maxWalkNum);
 
             double[] vel = new double[2]; // stores velocity as components x,y
             // check that walker has one on left, but not on right(or vice versa)

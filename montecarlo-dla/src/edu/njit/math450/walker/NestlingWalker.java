@@ -1,5 +1,6 @@
 package edu.njit.math450.walker;
 
+import edu.njit.math450.matrix.Locale;
 import edu.njit.math450.matrix.Space;
 
 /**
@@ -55,7 +56,7 @@ public class NestlingWalker extends Walker {
         //System.out.println("Raw attempted : " + proj.i + " : " + proj.j);
         int center = (int) (space.size() / 2);
         //calculate and truncate distance from the seed (euclidean norm)
-        int r = (int) distance(proj.j, proj.i, center, center);
+        int r = (int) Space.distance(proj.j, proj.i, center, center);
         //System.out.println("r: " + r);
         //check if the walker has crossed the radial boundary
         int bound = radius + buffer;
@@ -95,7 +96,7 @@ public class NestlingWalker extends Walker {
                 //update the space
                 space.set(proj.i, proj.j, space.get(proj.i, proj.j) + 1);
                 //calculate and truncate distance from the seed (euclidean norm)
-                int r = (int) distance(proj.j, proj.i, space.size()/2, space.size()/2);
+                int r = (int) Space.distance(proj.j, proj.i, space.size()/2, space.size()/2);
                 //update the max radius of the aggregate if there is still room to expand
                 int bound = radius + buffer;
                 if ((bound < ((space.size() / 2) - 1) &&

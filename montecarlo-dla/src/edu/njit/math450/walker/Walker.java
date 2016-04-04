@@ -9,32 +9,7 @@ import edu.njit.math450.matrix.*;
  */
 public abstract class Walker {
 
-
     protected Boolean nonNewtFlag;
-
-    protected static int[] deltaRow = {0, -1, -1, -1, 0, 1, 1, 1};
-    protected static int[] deltaCol = {1, 1, 0, -1, -1, -1, 0, 1};
-
-    protected class Locale {
-        public int i, j;
-
-        public Locale() {}
-
-        public Locale(int i, int j) {
-            this.i = i;
-            this.j = j;
-        }
-
-        public Locale(Locale locale) {
-            i = locale.i;
-            j = locale.j;
-        }
-
-        public void setCoords(int i, int j) {
-            this.i=i;
-            this.j=j;
-        }
-    }
 
     protected int buffer;
 
@@ -110,69 +85,6 @@ public abstract class Walker {
      */
     public void setWalkSeed(long walkSeed) {
         this.walkSeed = walkSeed;
-    }
-
-    /**
-     * Calculates and returns the Euclidean norm of the
-     * difference vector between two points (i, j) and (h, k)
-     * @param i x coord of (i, j)
-     * @param j y coord of (i, j)
-     * @param h x coord of (h, k)
-     * @param k y coord of (h, k)
-     *
-     * @return Euclidean norm of distance from (i, i) to (h, k)
-     */
-    protected double distance(int i, int j, int h, int k) {
-        //calculate the distance
-        double dist = Math.sqrt(Math.pow((i - h), 2) //<- assume seed is centered in the space
-                + Math.pow((j - k), 2));
-        return dist;
-    }
-
-    /**
-     * Returns the number of neighbors in an neigh + 1 x neigh + 1
-     * square centered at the given projected locale
-     * @param neig Dimensions - 1 of the square neighborhood to check
-     * @param proj Projected location (assumed empty)
-     * @return Number of neighbors in the neighborhood of the projected locale
-     */
-    protected int numNeig(int neig, Locale proj, Space space) {
-        int neighbors = 0;
-        // scan the block for neighbors starting at top left
-        for (int i = (proj.i - neig); i <= proj.i + neig && i < space.size(); i++) {
-            for (int j = (proj.j - neig); j <= proj.j + neig && j < space.size(); j++) {
-                // check if we have found a marked locale within the space
-                if (i >= 0 && j >= 0 && space.get(i, j) > 0) {
-                    // if we have we can count as a neighbor
-                    neighbors++;
-                }
-            }
-        }
-        // return the number of neighbors
-        return neighbors;
-    }
-
-    /**
-     * Checks if the given projection will form a hole on walker stick
-     * @param proj projected locale to check
-     * @param space adjacency matrix of the space
-     * @return true if a walker at proj will form a hole; false otherwise
-     */
-    protected Boolean makesHole(Locale proj, Space space) {
-        // get the current state
-        int curState = space.get(proj.i + 1, proj.j + 1);
-        // initialize flip count
-        int flips = 0;
-        // look over each array (ALWAYS size 8)
-        for (int i = 0; i < 8; i++) {
-            if ((curState > 0) != (space.get(proj.i + deltaRow[i], proj.j + deltaCol[i]) > 0)) {
-                flips++;
-                curState = space.get(proj.i + deltaRow[i], proj.j + deltaCol[i]);
-            }
-        }
-        // check to see if we've flipped 4 times which indicates a forming hole
-        return flips >= 4;
-
     }
 
     /**

@@ -1,7 +1,6 @@
 package edu.njit.math450.dla;
 
 import edu.njit.math450.matrix.Space;
-import edu.njit.math450.util.DLAUtil;
 import edu.njit.math450.walker.RadialWalker;
 import edu.njit.math450.walker.Walker;
 
@@ -90,13 +89,11 @@ public class DLASimulation {
                 walker.walk(space);
                 if (i % filter == 0) {
                     // calculate and print out the average speed over the boundary
-                    calcAvgSpd(i);
+                    //calcAvgSpd(i);
 
+                    double fDim = space.fractalDim();
+                    System.out.println(i + "," + fDim + "," + space.calcAvgSpd(i));
 
-                    double fDim = DLAUtil.fractalDim(space);
-                    System.out.println(i + "," + fDim + "," + calcAvgSpd(i));
-                    //writer.write("Walks : " + i + " fractal dimension : " + fDim + "\n");
-                    //writer.flush();
                     BufferedImage dlaImg = space.rasterize(100);
                     //set the scaling factor
                     int scale = 1;
@@ -140,44 +137,5 @@ public class DLASimulation {
      */
     public Boolean isComplete() {
         return complete;
-    }
-
-    /**
-     * Calculates the average speed of the aggregate at the given (current) walk number
-     * @param walkNum
-     */
-    public double calcAvgSpd(int walkNum) {
-        // calculate the average speed over the whole boundary
-        // this is resource intensive, don't do this in the final simulation
-        double averageSpd=0;
-        int numSpdMeasured=0;
-
-        for(int i1=0;i1<space.size();i1++) {
-            for(int j1=0;j1<space.size();j1++) {
-                if(space.get(i1,j1)>0) {
-                    double age = (walkNum + 3) - space.get(i1,j1); // implied cast to double
-                    double[] vel = new double[2]; // stores velocity as components x,y
-                    // check left and right
-                    // if one is occupied and the other isn't
-                    if(space.get(i1-1,j1)>0 && !(space.get(i1+1,j1)>0)) {
-                        vel[0]=1/age;
-                    } else if (space.get(i1+1,j1)>0 && !(space.get(i1-1,j1)>0)) {
-                        vel[0]=-1/age;
-                    }
-                    // check top and bottom
-                    if(space.get(i1,j1-1)>0 && !(space.get(i1,j1+1)>0)) {
-                        vel[1]=1/age;
-                    } else if (space.get(i1,j1+1)>0 && !(space.get(i1,j1-1)>0)) {
-                        vel[1]=-1/age;
-                    }
-
-                    if(vel[0]!=0 || vel[1]!=0) {
-                        averageSpd = (averageSpd*numSpdMeasured + Math.pow(vel[0]*vel[0]+vel[1]*vel[1],0.5)) / (++numSpdMeasured);
-                    }
-                }
-            }
-        }
-        return averageSpd;
-        //System.out.printf("%.9f \t %d  \t %d\n",averageSpd,numSpdMeasured,walkNum);
     }
 }
