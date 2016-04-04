@@ -334,9 +334,12 @@ public class RadialWalker extends Walker {
         return A;
     }
 
-    public double getB() {
-        return B;
-    }
+    public double getB() { return B; }
+
+    public double getCnn() { return Cnn; }
+
+    public double getAlpha() { return alpha;}
+
 
 
 }

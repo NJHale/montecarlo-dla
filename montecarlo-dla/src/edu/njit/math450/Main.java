@@ -8,12 +8,39 @@ import edu.njit.math450.walker.*;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.image.BufferedImage;
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 
 
 public class Main {
 
     public static void main(String[] args) {
+        if (args.length > 0) {
+            try  {
+                // pull out the run file path, this should be the first argument
+                BufferedReader reader = new BufferedReader(new FileReader(args[0]));
+                String line = null;
+                while ((line = reader.readLine()) != null) {
+                    String[] params = line.split("\\s");
+                    System.out.println("Launching sim...");
+                    launchSim(params);
+                }
+            } catch (FileNotFoundException e) {
+                System.err.println(String.format("File at %s not found", args[0]));
+            } catch (Exception e) {
+                System.err.println("An error occured while parsing run config file");
+            }
+
+
+        } else {
+            System.err.println("Expecting file path. System exiting...");
+            System.exit(1);
+        }
+    }
+
+    public static void launchSim(String[] args) {
         System.out.println("Parsing cmd line arguments");
         long walkSeed = 0;
         long oriSeed = 0;//8009832;
@@ -57,7 +84,7 @@ public class Main {
         // recalibrate spaceSize to a power of 2
         spaceSize = (int) Math.pow(2, (int)(Math.log(spaceSize - 1) / Math.log(2)) + 1);
 
-        boolean displayOn = true;
+        boolean displayOn = false;
 
         Walker walker;
 

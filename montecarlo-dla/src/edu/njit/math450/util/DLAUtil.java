@@ -21,8 +21,8 @@ public class DLAUtil {
     public static double fractalDim(Space A) {
         //int boxes = (int) (Math.log(A.size()) / Math.log(2));
 
-        List<Double> cnts = new ArrayList<>();
-        List<Double> x = new ArrayList<>();
+        List<Double> cnts = new ArrayList<Double>();
+        List<Double> x = new ArrayList<Double>();
         int start = (int) Math.pow(2, Math.round(Math.log(A.size()) / Math.log(2)) / 2);
         for (int i = start; i <= A.size(); i *= 2) {
             // System.out.println("boxNumber: " + i);

@@ -80,6 +80,7 @@ public class DLASimulation {
             dirPath += (walker.getNonNewtFlag()) ? "nonNewt" : "newt";
             dirPath += "_Size" + space.size() + "_Seed" + walker.getWalkSeed() +
                 "_A" + ((RadialWalker)walker).getA() + "_B" + ((RadialWalker)walker).getB();
+            if (walker.getNonNewtFlag()) dirPath += "_Cnn" + ((RadialWalker)walker).getCnn() + "_α" + ((RadialWalker)walker).getAlpha();
             File dir = new File(dirPath);
             boolean success = dir.mkdir() || dir.isDirectory();
 
@@ -171,7 +172,7 @@ public class DLASimulation {
                     }
 
                     if(vel[0]!=0 || vel[1]!=0) {
-                        averageSpd = (averageSpd + Math.pow(vel[0]*vel[0]+vel[1]*vel[1],0.5)) / (++numSpdMeasured);
+                        averageSpd = (averageSpd*numSpdMeasured + Math.pow(vel[0]*vel[0]+vel[1]*vel[1],0.5)) / (++numSpdMeasured);
                     }
                 }
             }
